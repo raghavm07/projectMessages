@@ -1,0 +1,154 @@
+[
+  {
+    "cardId": "c5062042-5301-482d-b399-9c6eebee88ca",
+    "cardBackgroundUrl": "https://cdn.pixabay.com/photo/2024/03/10/16/13/flower-8625039_1280.png",
+    "cardTitle": "Happy Birthday",
+    "ReciverEmployeeId": "1234",
+    "height": 700,
+    "width": 900,
+    "eventType": "Birthday",
+    "greetBackgroundColour": "#A52A2A",
+    "greetTextColour": "#FFFFFF",
+    "greetings": [
+      {
+        "greetingId": "66050402-c050-43d0-ab58-6d2b4661677b",
+        "message": "wdndwdw",
+        "employeeId": "1234",
+        "senderName": "2w2we",
+        "isBold": false,
+        "isItalic": false,
+        "fontFamily": "'Montserrat', sans-serif",
+        "x": 254.46875,
+        "y": 160.125,
+        "rotation": 94.35940784434482,
+        "backgroundColor": "A52A2A",
+        "textColor": "FFFFFF"
+      },
+      {
+        "greetingId": "e068f0db-04f9-4b49-9b13-32f903b1fec4",
+        "message": "nnnn",
+        "employeeId": "1234",
+        "senderName": "nnmmm",
+        "isBold": false,
+        "isItalic": true,
+        "fontFamily": "'Nunito', sans-serif",
+        "x": 509.75,
+        "y": 97.03125,
+        "rotation": 94.35940784434482
+      },
+      {
+        "greetingId": "b26776e2-b66e-42f8-9a0c-5e9538c0d6b8",
+        "message": "Happy BIrthday",
+        "employeeId": "1234",
+        "senderName": "Raghav",
+        "isBold": true,
+        "isItalic": true,
+        "fontFamily": "'Open Sans', sans-serif",
+        "backgroundColor": "#33FF57",
+        "textColor": "#800080",
+        "x": 583.5,
+        "y": 248
+      }
+    ]
+  },
+  {
+    "cardId": "8e382f8b-0157-45f0-aeac-128e3afe2403",
+    "cardBackgroundUrl": "https://cdn.pixabay.com/photo/2022/01/22/15/30/cake-6957626_640.jpg",
+    "cardTitle": "Happy Birthday Amresh🎂🎉🎊🎆",
+    "ReciverEmployeeId": "4444",
+    "height": 700,
+    "width": 900,
+    "eventType": "Work Anniversary",
+    "greetBackgroundColour": "#FFA500",
+    "greetTextColour": "#FFC0CB",
+    "greetings": [
+      {
+        "greetingId": "582aa7a0-db03-4ae7-8d75-d3d7ee003856",
+        "message": "Wishing You Happiest Birthday",
+        "employeeId": "1234",
+        "senderName": "Shagun",
+        "isBold": true,
+        "isItalic": true,
+        "fontFamily": "'Nunito', sans-serif",
+        "x": 430,
+        "y": 38,
+        "backgroundColor": "#F5F5DC",
+        "textColor": "#0000FF"
+      },
+      {
+        "greetingId": "8a4d5881-845b-431b-8a0a-daa1d3868442",
+        "message": "Many many happy returns of the day!!!!!🌹",
+        "employeeId": "1234",
+        "senderName": "Naushad",
+        "isBold": true,
+        "isItalic": true,
+        "x": 349.5,
+        "y": 642,
+        "backgroundColor": "transparent",
+        "textColor": "#800080",
+        "fontFamily": "'Roboto', sans-serif"
+      },
+      {
+        "greetingId": "d8d3b706-8b9d-4fc7-a461-01d2badb2c65",
+        "message": "HBD!!!!😊",
+        "employeeId": "1234",
+        "senderName": "Munir",
+        "isBold": true,
+        "isItalic": true,
+        "fontFamily": "'Lato', sans-serif",
+        "x": 52.5,
+        "y": 275,
+        "backgroundColor": "transparent",
+        "textColor": "#006400"
+      },
+      {
+        "greetingId": "ca423860-57b7-4507-8458-606625606fbb",
+        "message": "Happy Happy Birthday !!!👏👏",
+        "employeeId": "1234",
+        "senderName": "Naman",
+        "isBold": true,
+        "isItalic": false,
+        "x": 510.5,
+        "y": 144,
+        "backgroundColor": "transparent",
+        "textColor": "#FF5733"
+      },
+      {
+        "greetingId": "54136052-5d9e-45ff-9815-1df4f00ad4a7",
+        "message": "Happy Birthday!!!",
+        "employeeId": "1234",
+        "senderName": "Raghav",
+        "isBold": true,
+        "isItalic": false,
+        "backgroundColor": "transparent",
+        "textColor": "#A52A2A",
+        "x": 42.5,
+        "y": 41
+      },
+      {
+        "greetingId": "550a1495-c34e-4746-916e-f8ec767ed36f",
+        "message": "Happiest Birthday Amresh Sir",
+        "employeeId": "1234",
+        "senderName": "Raghav",
+        "isBold": true,
+        "isItalic": true,
+        "backgroundColor": "#8B0000",
+        "textColor": "#FFD700",
+        "x": 564.5,
+        "y": 587
+      }
+    ]
+  },
+  {
+    "cardId": "b97fde4e-3119-49b6-8b3b-055d3a06f0bd",
+    "cardBackgroundUrl": "https://cdn.pixabay.com/photo/2025/03/24/13/56/egg-9490859_640.png",
+    "cardTitle": "birthday",
+    "ReciverEmployeeId": "4444",
+    "height": 600,
+    "width": 800,
+    "eventType": "Birthday",
+    "greetBackgroundColour": "#A52A2A",
+    "greetTextColour": "#00FF00",
+    "greetings": []
+  }
+]
