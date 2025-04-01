@@ -232,7 +232,10 @@ const GreetingCard = () => {
         >
           <RotateCcw size={16} className="text-white" />
         </div> */}
-        {item.message} - {item.senderName}
+        <div className="flex flex-col">
+          <span>{item.message}</span>
+          <span className="text-sm mt-1">-{item.senderName}</span>
+        </div>
         {loggedInEmployeeId === item.employeeId && (
           <button
             onClick={(e) => {

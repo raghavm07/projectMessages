@@ -70,8 +70,8 @@
         "isBold": true,
         "isItalic": true,
         "fontFamily": "'Nunito', sans-serif",
-        "x": 430,
-        "y": 38,
+        "x": 584,
+        "y": 53,
         "backgroundColor": "#F5F5DC",
         "textColor": "#0000FF"
       },
@@ -82,8 +82,8 @@
         "senderName": "Naushad",
         "isBold": true,
         "isItalic": true,
-        "x": 349.5,
-        "y": 642,
+        "x": 68.5,
+        "y": 631,
         "backgroundColor": "transparent",
         "textColor": "#800080",
         "fontFamily": "'Roboto', sans-serif"
@@ -134,8 +134,8 @@
         "isItalic": true,
         "backgroundColor": "#8B0000",
         "textColor": "#FFD700",
-        "x": 564.5,
-        "y": 587
+        "x": 641.5,
+        "y": 625
       }
     ]
   },
