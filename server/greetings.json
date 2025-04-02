@@ -64,14 +64,14 @@
     "greetings": [
       {
         "greetingId": "582aa7a0-db03-4ae7-8d75-d3d7ee003856",
-        "message": "Wishing You Happiest Birthday",
+        "message": "Wishing You  Birthday",
         "employeeId": "1234",
         "senderName": "Shagun",
-        "isBold": true,
-        "isItalic": true,
-        "fontFamily": "'Nunito', sans-serif",
-        "x": 584,
-        "y": 53,
+        "isBold": false,
+        "isItalic": false,
+        "fontFamily": "'Roboto', sans-serif",
+        "x": 93.5390625,
+        "y": 396.3984375,
         "backgroundColor": "#F5F5DC",
         "textColor": "#0000FF"
       },
@@ -79,14 +79,15 @@
         "greetingId": "8a4d5881-845b-431b-8a0a-daa1d3868442",
         "message": "Many many happy returns of the day!!!!!🌹",
         "employeeId": "1234",
-        "senderName": "Naushad",
-        "isBold": true,
+        "senderName": " Raghav",
+        "isBold": false,
         "isItalic": true,
-        "x": 68.5,
-        "y": 631,
-        "backgroundColor": "transparent",
-        "textColor": "#800080",
-        "fontFamily": "'Roboto', sans-serif"
+        "x": 657.03125,
+        "y": 133.5625,
+        "backgroundColor": "#1616e9",
+        "textColor": "#f3f3f3",
+        "fontFamily": "'Helvetica Neue', Arial, sans-serif",
+        "rotation": 90
       },
       {
         "greetingId": "d8d3b706-8b9d-4fc7-a461-01d2badb2c65",
@@ -96,10 +97,10 @@
         "isBold": true,
         "isItalic": true,
         "fontFamily": "'Lato', sans-serif",
-        "x": 52.5,
-        "y": 275,
+        "x": 358.5,
+        "y": 110,
         "backgroundColor": "transparent",
-        "textColor": "#006400"
+        "textColor": "#FF5733"
       },
       {
         "greetingId": "ca423860-57b7-4507-8458-606625606fbb",
@@ -108,10 +109,10 @@
         "senderName": "Naman",
         "isBold": true,
         "isItalic": false,
-        "x": 510.5,
-        "y": 144,
+        "x": 205.5,
+        "y": 256,
         "backgroundColor": "transparent",
-        "textColor": "#FF5733"
+        "textColor": "#483D8B"
       },
       {
         "greetingId": "54136052-5d9e-45ff-9815-1df4f00ad4a7",
@@ -122,20 +123,72 @@
         "isItalic": false,
         "backgroundColor": "transparent",
         "textColor": "#A52A2A",
-        "x": 42.5,
-        "y": 41
+        "x": 701.5,
+        "y": 20
       },
       {
         "greetingId": "550a1495-c34e-4746-916e-f8ec767ed36f",
-        "message": "Happiest Birthday Amresh Sir",
+        "message": "qdsnsndjdsdsndsndnndndnndndndnndndndndnndndnndndnndndndnndnd",
         "employeeId": "1234",
-        "senderName": "Raghav",
+        "senderName": "Raghav Mittal",
+        "isBold": false,
+        "isItalic": false,
+        "backgroundColor": "#65785e",
+        "textColor": "#272a56",
+        "x": 151,
+        "y": 174,
+        "fontFamily": "'Roboto', sans-serif",
+        "rotation": 0
+      },
+      {
+        "greetingId": "19c42586-e080-4096-8141-46ac93e0e6ad",
+        "message": "Happy Birthday",
+        "employeeId": "1234",
+        "senderName": "Shivam",
         "isBold": true,
         "isItalic": true,
-        "backgroundColor": "#8B0000",
-        "textColor": "#FFD700",
-        "x": 641.5,
-        "y": 625
+        "fontFamily": "'Nunito', sans-serif",
+        "backgroundColor": "transparent",
+        "textColor": "#00008B",
+        "x": 333.484375,
+        "y": 455.984375
+      },
+      {
+        "greetingId": "3ce3e6d3-c589-4b08-a080-5ba879ba55f8",
+        "message": "Happy Birthday",
+        "employeeId": "1234",
+        "senderName": "Raghav",
+        "isBold": false,
+        "isItalic": false,
+        "x": 769.484375,
+        "y": 316,
+        "backgroundColor": "#FFC0CB",
+        "textColor": "black"
+      },
+      {
+        "greetingId": "be21e4f8-b330-4ba9-ba54-66fa115855bb",
+        "message": "Raghav",
+        "employeeId": "1234",
+        "senderName": "Suhail",
+        "isBold": false,
+        "isItalic": true,
+        "fontFamily": "'Roboto', sans-serif",
+        "x": 248.4375,
+        "y": 565.9921875,
+        "backgroundColor": "#b79d9d",
+        "textColor": "#b73838"
+      },
+      {
+        "greetingId": "4b26f3c9-22f9-47ea-bb40-7698d7a33c76",
+        "message": "nnnnn",
+        "employeeId": "1234",
+        "senderName": "nnn",
+        "isBold": false,
+        "isItalic": false,
+        "fontFamily": "'Times New Roman', Times, serif",
+        "x": 101.484375,
+        "y": 84.046875,
+        "rotation": 0
       }
     ]
   },

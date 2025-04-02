@@ -51,6 +51,7 @@ router.post("/", (req, res) => {
     textColor,
     x = 0,
     y = 0,
+    rotation,
   } = req.body;
 
   if (!cardId || !message || !employeeId || !senderName) {
@@ -77,6 +78,7 @@ router.post("/", (req, res) => {
       fontFamily,
       backgroundColor,
       textColor,
+      rotation,
       x,
       y,
     };
@@ -116,6 +118,7 @@ router.put("/:greetingId", (req, res) => {
   console.log("y", y);
   console.log("senderName", senderName);
   console.log("isBold", isBold);
+  console.log("rotation", rotation);
   if (!message || !employeeId) {
     return res
       .status(400)
@@ -139,7 +142,7 @@ router.put("/:greetingId", (req, res) => {
           greeting.fontFamily = fontFamily;
           greeting.backgroundColor = backgroundColor;
           greeting.textColor = textColor;
-          greeting.rotation !== undefined ? rotation : 0;
+          greeting.rotation = rotation;
           if (x !== undefined) greeting.x = x;
           if (y !== undefined) greeting.y = y;
           isUpdated = true;

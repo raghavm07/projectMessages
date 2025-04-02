@@ -18,7 +18,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import GreetingCardSkeleton from "./CardSkeleton";
 import { Menu, Transition } from "@headlessui/react";
-import { fontFamilies, colors } from "../../constants.json";
+import { HexColorPicker } from "react-colorful";
+import { fontFamilies } from "../../constants.json";
 
 const ItemType = {
   TEXT: "text",
@@ -41,6 +42,9 @@ const GreetingCard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [isRotating, setIsRotating] = useState(false);
+  const [fontSearch, setFontSearch] = useState("");
+  const [bgColorSearch, setBgColorSearch] = useState("");
+  const [textColorSearch, setTextColorSearch] = useState("");
 
   const containerRef = useRef(null);
 
@@ -70,21 +74,19 @@ const GreetingCard = () => {
     fetchCardData();
   }, [cardId]);
 
-  const moveTextItem = (id, x, y, rotation) => {
+  const moveTextItem = (id, x, y) => {
     setTextItems((prev) =>
-      prev.map((item) =>
-        item.greetingId === id ? { ...item, x, y, rotation } : item
-      )
+      prev.map((item) => (item.greetingId === id ? { ...item, x, y } : item))
     );
 
     const updatedItem = textItems.find((item) => item.greetingId === id);
     if (updatedItem) {
-      const updatedData = { ...updatedItem, x, y, rotation };
+      const updatedData = { ...updatedItem, x, y };
       console.log("updatedData", updatedData);
       axios
         .put(`${API_BASE_URL}/greetings/${id}`, updatedData)
         // .then(() => toast.success("Position updated successfully."))
-        .catch(() => toast.error("Failed to update position or rotation."));
+        .catch(() => toast.error("Failed to update position."));
     }
   };
 
@@ -103,6 +105,7 @@ const GreetingCard = () => {
       fontFamily,
       backgroundColor,
       textColor,
+      rotation,
     } = modalData;
     console.log(x, y);
     if (greetingId) {
@@ -119,6 +122,7 @@ const GreetingCard = () => {
           fontFamily,
           backgroundColor,
           textColor,
+          rotation,
         })
         .then(() => {
           setTextItems((prev) =>
@@ -134,6 +138,7 @@ const GreetingCard = () => {
                     fontFamily,
                     backgroundColor,
                     textColor,
+                    rotation,
                   }
                 : item
             )
@@ -157,6 +162,7 @@ const GreetingCard = () => {
         fontFamily: fontFamily,
         backgroundColor: backgroundColor,
         textColor: textColor,
+        rotation: rotation,
       };
 
       axios
@@ -218,8 +224,7 @@ const GreetingCard = () => {
           fontWeight: item.isBold ? "bold" : "lighter",
           fontStyle: item.isItalic ? "italic" : "normal",
           fontFamily: item.fontFamily,
-
-          // transform: `rotate(${item.rotation || 0}deg)`,
+          transform: `rotate(${item.rotation}deg)`,
         }}
         // onMouseMove={handleMouseMove}
         // onMouseUp={handleMouseUp}
@@ -255,7 +260,7 @@ const GreetingCard = () => {
                 fontFamily: item.fontFamily,
                 backgroundColor: item.backgroundColor,
                 textColor: item.textColor,
-                // rotation: item.rotation || 0,
+                rotation: item.rotation || 0,
               });
               setIsModalOpen(true);
             }}
@@ -523,178 +528,223 @@ const GreetingCard = () => {
           </div>
 
           {isModalOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-4xl">
-                <h3 className="text-2xl font-bold mb-6 text-center">
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-8">
+              <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-5xl">
+                <h3 className="text-2xl font-bold mb-6 text-center ">
                   {modalData.greetingId ? "Edit Greeting" : "Add Greeting"}
                 </h3>
+                <div className=" flex gap-6">
+                  {/* Form Fields */}
+                  <div className="w-1/2 flex flex-col space-y-6">
+                    {/* Bottom Left: Color Pickers */}
+                    <div className="flex space-x-6">
+                      <div className="flex flex-col w-1/2">
+                        <label className="text-sm text-gray-700 font-medium mb-2">
+                          BG Color
+                        </label>
+                        <HexColorPicker
+                          color={modalData.backgroundColor}
+                          onChange={(color) =>
+                            setModalData((prev) => ({
+                              ...prev,
+                              backgroundColor: color,
+                            }))
+                          }
+                          className="w-full rounded-md shadow-sm"
+                        />
+                      </div>
 
-                <div className="grid grid-cols-2 gap-6">
-                  {/* Message Input */}
-                  <div className="flex items-center">
-                    <label className="block w-1/3 text-gray-700 font-medium pr-4">
-                      Message
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter message"
-                      value={modalData.text}
-                      onChange={(e) =>
-                        setModalData((prev) => ({
-                          ...prev,
-                          text: e.target.value,
-                        }))
-                      }
-                      className="w-2/3 p-3 border border-gray-300 rounded-lg"
-                    />
+                      <div className="flex flex-col w-1/2">
+                        <label className="text-sm text-gray-700 font-medium mb-2">
+                          Text Color
+                        </label>
+                        <HexColorPicker
+                          color={modalData.textColor}
+                          onChange={(color) =>
+                            setModalData((prev) => ({
+                              ...prev,
+                              textColor: color,
+                            }))
+                          }
+                          className="w-full rounded-md shadow-sm"
+                        />
+                      </div>
+                    </div>
+
+                    {/*Preview (*/}
+                    <div className="   bottom-4 right-4 p-6 rounded-lg shadow-lg  bg-gray-300 z-40">
+                      <div
+                        className="w-full text-center"
+                        style={{
+                          backgroundColor: modalData.backgroundColor,
+                          color: modalData.textColor,
+                          transform: `rotate(${modalData.rotation}deg)`,
+                          fontFamily: modalData.fontFamily || "inherit",
+                          fontWeight: modalData.isBold ? "bold" : "normal",
+                          fontStyle: modalData.isItalic ? "italic" : "normal",
+                        }}
+                      >
+                        <p className="text-lg ">
+                          {modalData.text || "Your message here..."}
+                        </p>
+                        <p className="text-sm mt-2">{`- ${
+                          modalData.name || "Sender"
+                        }`}</p>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Sender Name Input */}
-                  <div className="flex items-center">
-                    <label className="block w-1/3 text-gray-700 font-medium pr-4">
-                      Sender Name
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter sender name"
-                      value={modalData.name}
-                      onChange={(e) =>
-                        setModalData((prev) => ({
-                          ...prev,
-                          name: e.target.value,
-                        }))
-                      }
-                      className="w-2/3 p-3 border border-gray-300 rounded-lg"
-                    />
-                  </div>
-
-                  {/* Font Selector */}
-                  <div className="flex items-center">
-                    <label className="block w-1/3 text-gray-700 font-medium pr-4">
-                      Font Family
-                    </label>
-                    <select
-                      value={modalData.fontFamily}
-                      onChange={(e) =>
-                        setModalData((prev) => ({
-                          ...prev,
-                          fontFamily: e.target.value,
-                        }))
-                      }
-                      className="w-2/3 p-3 border border-gray-300 rounded-lg"
-                    >
-                      {fontFamilies.map((font, index) => (
-                        <option key={index} value={font.value}>
-                          {font.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* backgroundColor Selector */}
-                  <div className="flex items-center">
-                    <label className="block w-1/3 text-gray-700 font-medium pr-4">
-                      Background Color
-                    </label>
-                    <select
-                      value={
-                        modalData.backgroundColor
-                          ? modalData.backgroundColor
-                          : greetBackgroundColour
-                      }
-                      onChange={(e) =>
-                        setModalData((prev) => ({
-                          ...prev,
-                          backgroundColor: e.target.value,
-                        }))
-                      }
-                      className="w-2/3 p-3 border border-gray-300 rounded-lg"
-                    >
-                      {colors.map((color, index) => (
-                        <option key={index} value={color.value}>
-                          {color.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* textColor Selector */}
-                  <div className="flex items-center">
-                    <label className="block w-1/3 text-gray-700 font-medium pr-4">
-                      Text Color
-                    </label>
-                    <select
-                      value={
-                        modalData.textColor
-                          ? modalData.textColor
-                          : greetTextColour
-                      }
-                      onChange={(e) =>
-                        setModalData((prev) => ({
-                          ...prev,
-                          textColor: e.target.value,
-                        }))
-                      }
-                      className="w-2/3 p-3 border border-gray-300 rounded-lg"
-                    >
-                      {colors.map((color, index) => (
-                        <option key={index} value={color.value}>
-                          {color.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Bold and Italics Options */}
-
-                  <div className="flex items-center">
-                    <label className=" text-gray-700 font-medium p-4">
-                      Bold
-                    </label>
-                    <input
-                      type="checkbox"
-                      checked={modalData.isBold || false}
-                      onChange={(e) =>
-                        setModalData((prev) => ({
-                          ...prev,
-                          isBold: e.target.checked,
-                        }))
-                      }
-                      className="w-5 h-5 accent-blue-600"
-                    />
-
-                    <div className="flex items-center ">
-                      <label className=" text-gray-700 font-medium p-4">
-                        Italics
+                  {/*  Form Fields */}
+                  <div className="w-1/2 flex flex-col space-y-6">
+                    {/* Top: Message Input */}
+                    <div className="flex flex-col">
+                      <label className="text-sm text-gray-700 font-medium mb-2">
+                        Message
                       </label>
                       <input
-                        type="checkbox"
-                        checked={modalData.isItalic || false}
+                        type="text"
+                        placeholder="Enter message"
+                        value={modalData.text}
+                        maxLength={60}
                         onChange={(e) =>
                           setModalData((prev) => ({
                             ...prev,
-                            isItalic: e.target.checked,
+                            text: e.target.value,
                           }))
                         }
-                        className="w-5 h-5 accent-blue-600"
+                        className="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
                       />
                     </div>
-                  </div>
-                </div>
 
-                <div className="flex justify-end mt-6">
-                  <button
-                    onClick={() => setIsModalOpen(false)}
-                    className="bg-gray-300 text-gray-800 font-semibold px-4 py-2 rounded-lg mr-2"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleSaveModal}
-                    className="bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition duration-300"
-                  >
-                    Save
-                  </button>
+                    {/* Top: Sender Name Input */}
+                    <div className="flex flex-col">
+                      <label className="text-sm text-gray-700 font-medium mb-2">
+                        Sender
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Enter sender name"
+                        value={modalData.name}
+                        onChange={(e) =>
+                          setModalData((prev) => ({
+                            ...prev,
+                            name: e.target.value,
+                          }))
+                        }
+                        className="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                      />
+                    </div>
+
+                    {/* Font Selector */}
+                    <div className="flex flex-col">
+                      <label className="text-sm text-gray-700 font-medium mb-2">
+                        Font
+                      </label>
+                      <select
+                        value={modalData.fontFamily}
+                        onChange={(e) =>
+                          setModalData((prev) => ({
+                            ...prev,
+                            fontFamily: e.target.value,
+                          }))
+                        }
+                        className="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                      >
+                        {fontFamilies.map((font, index) => (
+                          <option key={index} value={font.value}>
+                            {font.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Bold & Italic Buttons */}
+                    <div className="flex space-x-4 mt-4">
+                      <button
+                        onClick={() =>
+                          setModalData((prev) => ({
+                            ...prev,
+                            isBold: !prev.isBold,
+                          }))
+                        }
+                        className={`px-4 py-2 rounded-md transition duration-200 ${
+                          modalData.isBold
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                        }`}
+                      >
+                        <strong>B</strong>
+                      </button>
+                      <button
+                        onClick={() =>
+                          setModalData((prev) => ({
+                            ...prev,
+                            isItalic: !prev.isItalic,
+                          }))
+                        }
+                        className={`px-4 py-2 rounded-md transition duration-200 ${
+                          modalData.isItalic
+                            ? "bg-blue-500 text-white italic"
+                            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                        }`}
+                      >
+                        <em>I</em>
+                      </button>
+                    </div>
+
+                    {/* Rotate Buttons */}
+                    <div className="flex items-center space-x-4 mt-6">
+                      <button
+                        onClick={() =>
+                          setModalData((prev) => ({
+                            ...prev,
+                            rotation: prev.rotation
+                              ? prev.rotation - 10
+                              : 0 - 10,
+                          }))
+                        }
+                        className="px-4 py-2 text-sm rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-200"
+                      >
+                        <span role="img" aria-label="rotate-left">
+                          ↻
+                        </span>
+                      </button>
+                      <label className="text-sm text-gray-700 font-medium">
+                        Rotate
+                      </label>
+                      <button
+                        onClick={() =>
+                          setModalData((prev) => ({
+                            ...prev,
+                            rotation: prev.rotation
+                              ? prev.rotation + 10
+                              : 0 + 10,
+                          }))
+                        }
+                        className="px-4 py-2 text-sm rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-200"
+                      >
+                        <span role="img" aria-label="rotate-right">
+                          ↺
+                        </span>
+                      </button>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex justify-end mt-8 space-x-4">
+                      <button
+                        onClick={() => setIsModalOpen(false)}
+                        className="bg-gray-400 text-white font-semibold px-6 py-2 rounded-lg hover:bg-gray-500 transition duration-200 text-sm"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleSaveModal}
+                        className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-lg shadow-md hover:bg-blue-600 transition duration-200 text-sm"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
