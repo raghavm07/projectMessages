@@ -19,6 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 import GreetingCardSkeleton from "./CardSkeleton";
 import { Menu, Transition } from "@headlessui/react";
 import { HexColorPicker } from "react-colorful";
+import { SketchPicker } from "react-color";
 import { fontFamilies } from "../../constants.json";
 
 const ItemType = {
@@ -40,11 +41,10 @@ const GreetingCard = () => {
   const [downloading, setDownloading] = useState(false);
   const [modalData, setModalData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [rotation, setRotation] = useState(0);
-  const [isRotating, setIsRotating] = useState(false);
-  const [fontSearch, setFontSearch] = useState("");
-  const [bgColorSearch, setBgColorSearch] = useState("");
-  const [textColorSearch, setTextColorSearch] = useState("");
+  const [showFont, setShowFont] = useState(false);
+  const [showTextPicker, setShowTextPicker] = useState(false);
+  const [showBackgroundTextPicker, setShowBackgroundTextPicker] =
+    useState(false);
 
   const containerRef = useRef(null);
 
@@ -529,7 +529,7 @@ const GreetingCard = () => {
 
           {isModalOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-8">
-              <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-5xl">
+              <div className="bg-gray-100 rounded-xl shadow-xl p-8 w-full max-w-5xl">
                 <h3 className="text-2xl font-bold mb-6 text-center ">
                   {modalData.greetingId ? "Edit Greeting" : "Add Greeting"}
                 </h3>
@@ -538,36 +538,59 @@ const GreetingCard = () => {
                   <div className="w-1/2 flex flex-col space-y-6">
                     {/* Bottom Left: Color Pickers */}
                     <div className="flex space-x-6">
+                      {/* Color picker */}
                       <div className="flex flex-col w-1/2">
-                        <label className="text-sm text-gray-700 font-medium mb-2">
-                          BG Color
-                        </label>
-                        <HexColorPicker
-                          color={modalData.backgroundColor}
-                          onChange={(color) =>
-                            setModalData((prev) => ({
-                              ...prev,
-                              backgroundColor: color,
-                            }))
-                          }
-                          className="w-full rounded-md shadow-sm"
-                        />
+                        {showTextPicker && (
+                          <div className="absolute z-50 mt-2 bg-gray-200 shadow-lg p-2 rounded-md">
+                            <label className="text-sm text-gray-700 font-medium mb-2">
+                              Text Color
+                            </label>
+                            <button
+                              className="text-sm text-gray-700 font-medium mb-2"
+                              onClick={() => setShowTextPicker(!showTextPicker)}
+                            >
+                              ❌
+                            </button>
+                            <SketchPicker
+                              color={modalData.textColor}
+                              onChange={(color) =>
+                                setModalData((prev) => ({
+                                  ...prev,
+                                  textColor: color.hex,
+                                }))
+                              }
+                            />
+                          </div>
+                        )}
                       </div>
 
                       <div className="flex flex-col w-1/2">
-                        <label className="text-sm text-gray-700 font-medium mb-2">
-                          Text Color
-                        </label>
-                        <HexColorPicker
-                          color={modalData.textColor}
-                          onChange={(color) =>
-                            setModalData((prev) => ({
-                              ...prev,
-                              textColor: color,
-                            }))
-                          }
-                          className="w-full rounded-md shadow-sm"
-                        />
+                        {showBackgroundTextPicker && (
+                          <div className="absolute z-50 mt-2  bg-gray-200 shadow-lg p-2 rounded-md">
+                            <label className="text-sm text-gray-700 font-medium mb-2">
+                              BG Color
+                            </label>
+                            <button
+                              className="text-sm text-gray-700 font-medium mb-2"
+                              onClick={() =>
+                                setShowBackgroundTextPicker(
+                                  !showBackgroundTextPicker
+                                )
+                              }
+                            >
+                              ❌
+                            </button>
+                            <SketchPicker
+                              color={modalData.backgroundColor}
+                              onChange={(color) =>
+                                setModalData((prev) => ({
+                                  ...prev,
+                                  backgroundColor: color.hex,
+                                }))
+                              }
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -658,16 +681,13 @@ const GreetingCard = () => {
                       </select>
                     </div>
 
-                    {/* Bold & Italic Buttons */}
-                    <div className="flex space-x-4 mt-4">
+                    <div className="flex items-center space-x-4 mt-4">
+                      {/* Bold & Italic */}
                       <button
                         onClick={() =>
-                          setModalData((prev) => ({
-                            ...prev,
-                            isBold: !prev.isBold,
-                          }))
+                          setModalData((p) => ({ ...p, isBold: !p.isBold }))
                         }
-                        className={`px-4 py-2 rounded-md transition duration-200 ${
+                        className={`px-3 py-2 rounded-md transition ${
                           modalData.isBold
                             ? "bg-blue-500 text-white"
                             : "bg-gray-200 text-gray-700 hover:bg-gray-300"
@@ -677,12 +697,9 @@ const GreetingCard = () => {
                       </button>
                       <button
                         onClick={() =>
-                          setModalData((prev) => ({
-                            ...prev,
-                            isItalic: !prev.isItalic,
-                          }))
+                          setModalData((p) => ({ ...p, isItalic: !p.isItalic }))
                         }
-                        className={`px-4 py-2 rounded-md transition duration-200 ${
+                        className={`px-3 py-2 rounded-md transition ${
                           modalData.isItalic
                             ? "bg-blue-500 text-white italic"
                             : "bg-gray-200 text-gray-700 hover:bg-gray-300"
@@ -690,43 +707,66 @@ const GreetingCard = () => {
                       >
                         <em>I</em>
                       </button>
-                    </div>
 
-                    {/* Rotate Buttons */}
-                    <div className="flex items-center space-x-4 mt-6">
+                      {/* Rotation */}
                       <button
                         onClick={() =>
-                          setModalData((prev) => ({
-                            ...prev,
-                            rotation: prev.rotation
-                              ? prev.rotation - 10
-                              : 0 - 10,
+                          setModalData((p) => ({
+                            ...p,
+                            rotation: (p.rotation || 0) - 10,
                           }))
                         }
-                        className="px-4 py-2 text-sm rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-200"
+                        className="px-3 py-2 text-sm rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
                       >
-                        <span role="img" aria-label="rotate-left">
-                          ↻
-                        </span>
+                        ↺
                       </button>
                       <label className="text-sm text-gray-700 font-medium">
                         Rotate
                       </label>
                       <button
                         onClick={() =>
-                          setModalData((prev) => ({
-                            ...prev,
-                            rotation: prev.rotation
-                              ? prev.rotation + 10
-                              : 0 + 10,
+                          setModalData((p) => ({
+                            ...p,
+                            rotation: (p.rotation || 0) + 10,
                           }))
                         }
-                        className="px-4 py-2 text-sm rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-200"
+                        className="px-3 py-2 text-sm rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
                       >
-                        <span role="img" aria-label="rotate-right">
-                          ↺
-                        </span>
+                        ↻
                       </button>
+
+                      {/* Text & Background Color */}
+                      <div
+                        className="relative w-10 h-10 rounded-md border cursor-pointer flex items-center justify-center shadow-sm"
+                        style={{ backgroundColor: modalData.textColor }}
+                        onClick={() => setShowTextPicker(!showTextPicker)}
+                      >
+                        <span className="text-black font-medium text-xs">
+                          T
+                        </span>
+                      </div>
+                      <div
+                        className="relative w-10 h-10 rounded-md border cursor-pointer flex items-center justify-center shadow-sm"
+                        style={{ backgroundColor: modalData.backgroundColor }}
+                        onClick={() =>
+                          setShowBackgroundTextPicker(!showBackgroundTextPicker)
+                        }
+                      >
+                        <span className="text-black font-medium text-xs">
+                          BG
+                        </span>
+                      </div>
+
+                      {/* font */}
+                      <div
+                        className="relative w-10 h-10 rounded-md border cursor-pointer flex items-center justify-center shadow-sm"
+                        style={{ fontFamily: modalData.fontFamily }}
+                        onClick={() => setShowTextPicker(!showTextPicker)}
+                      >
+                        <span className="text-black font-medium text-xs">
+                          F
+                        </span>
+                      </div>
                     </div>
 
                     {/* Action Buttons */}
