@@ -56,8 +56,8 @@
     "cardBackgroundUrl": "https://cdn.pixabay.com/photo/2022/01/22/15/30/cake-6957626_640.jpg",
     "cardTitle": "Happy Birthday Amresh🎂🎉🎊🎆",
     "ReciverEmployeeId": "4444",
-    "height": 700,
-    "width": 900,
+    "height": 800,
+    "width": 1000,
     "eventType": "Work Anniversary",
     "greetBackgroundColour": "#FFA500",
     "greetTextColour": "#FFC0CB",
@@ -82,11 +82,11 @@
         "senderName": " Raghav",
         "isBold": false,
         "isItalic": false,
-        "x": 318.40625,
-        "y": 190.1875,
+        "x": 0,
+        "y": 280,
         "backgroundColor": "#5353df",
-        "textColor": "#cf9a6b",
-        "fontFamily": "'Helvetica Neue', Arial, sans-serif",
+        "textColor": "#71062d",
+        "fontFamily": "'Roboto', sans-serif",
         "rotation": 0
       },
       {
@@ -104,15 +104,16 @@
       },
       {
         "greetingId": "ca423860-57b7-4507-8458-606625606fbb",
-        "message": "Happy Happy Birthday !!!👏👏",
+        "message": "Happy Happy Birthday !!!👏👏🎯🎯🎯🎯🎯",
         "employeeId": "1234",
         "senderName": "Naman",
         "isBold": true,
         "isItalic": false,
-        "x": 105.5,
-        "y": 307,
+        "x": 223.5,
+        "y": 170,
         "backgroundColor": "transparent",
-        "textColor": "#483D8B"
+        "textColor": "#483D8B",
+        "rotation": 0
       },
       {
         "greetingId": "54136052-5d9e-45ff-9815-1df4f00ad4a7",
@@ -123,8 +124,8 @@
         "isItalic": false,
         "backgroundColor": "transparent",
         "textColor": "#A52A2A",
-        "x": 701.5,
-        "y": 20
+        "x": 502.5,
+        "y": 0
       },
       {
         "greetingId": "550a1495-c34e-4746-916e-f8ec767ed36f",
@@ -186,8 +187,8 @@
         "isBold": false,
         "isItalic": false,
         "fontFamily": "'Times New Roman', Times, serif",
-        "x": 172.484375,
-        "y": 124.046875,
+        "x": 749.484375,
+        "y": 84.046875,
         "rotation": 0
       },
       {
@@ -214,8 +215,20 @@
         "backgroundColor": "#804545",
         "textColor": "#171711",
         "rotation": -350,
-        "x": 729.2605590820312,
-        "y": 99.52255249023438
+        "x": 763.7918090820312,
+        "y": 1.397552490234375
+      },
+      {
+        "greetingId": "a85aa023-d255-4c31-b5d5-697b18eb459a",
+        "message": "test message fdsghfhjng",
+        "employeeId": "1234",
+        "senderName": "abcdef",
+        "isBold": false,
+        "isItalic": false,
+        "backgroundColor": "#8a8a9f",
+        "textColor": "#230f87",
+        "x": 77.5,
+        "y": 21
       }
     ]
   },
@@ -229,6 +242,33 @@
     "eventType": "Birthday",
     "greetBackgroundColour": "#A52A2A",
     "greetTextColour": "#00FF00",
+    "greetings": [
+      {
+        "greetingId": "ec3acaa5-3b8a-4c48-b744-5d634208cd6f",
+        "message": "Happy Birthday Gaurav Bhai",
+        "employeeId": "1234",
+        "senderName": "Raghav",
+        "isBold": true,
+        "isItalic": true,
+        "fontFamily": "'Nunito', sans-serif",
+        "backgroundColor": "#807b93",
+        "textColor": "#2d255e",
+        "rotation": -10,
+        "x": 34.764129638671875,
+        "y": 48.867340087890625
+      }
+    ]
+  },
+  {
+    "cardId": "9c39f272-376a-4465-b5f5-efedb449d9f1",
+    "cardBackgroundUrl": "https://cdn.pixabay.com/photo/2024/02/22/19/14/mosaic-8590725_640.jpg",
+    "cardTitle": "Gaurav's Anniversary",
+    "ReciverEmployeeId": "123445",
+    "height": 600,
+    "width": 800,
+    "eventType": "Birthday",
+    "greetBackgroundColour": "#FFA500",
+    "greetTextColour": "#ADD8E6",
     "greetings": []
   }
 ]
