@@ -225,7 +225,7 @@
       },
       {
         "greetingId": "550a1495-c34e-4746-916e-f8ec767ed36f",
-        "message": "hello",
+        "message": "Raghav",
         "employeeId": "1234",
         "senderName": "Raghav Mittal",
         "isBold": false,
@@ -411,6 +411,28 @@
         "rotation": 180,
         "x": 853.5,
         "y": 58
+      },
+      {
+        "greetingId": "617f7970-67d9-435d-b032-35e56673d8f2",
+        "message": "congratulations",
+        "employeeId": "1234",
+        "senderName": "Ram",
+        "isBold": true,
+        "isItalic": false,
+        "x": 541,
+        "y": 214
+      },
+      {
+        "greetingId": "3610d0c4-64fe-4721-b981-7bcf4f7b9fa5",
+        "message": "see you soon",
+        "employeeId": "1234",
+        "senderName": "hello hello hello",
+        "isBold": false,
+        "isItalic": false,
+        "fontFamily": "'Times New Roman', Times, serif",
+        "rotation": -40,
+        "x": 686.5,
+        "y": 308
       }
     ]
   },

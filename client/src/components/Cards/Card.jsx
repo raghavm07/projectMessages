@@ -41,6 +41,7 @@ const GreetingCard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showFont, setShowFont] = useState(false);
   const [showTextPicker, setShowTextPicker] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const [showBackgroundTextPicker, setShowBackgroundTextPicker] =
     useState(false);
 
@@ -273,6 +274,39 @@ const GreetingCard = () => {
     },
   });
 
+  const startListening = (field) => {
+    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+      alert("Speech Recognition is not supported in this browser.");
+      return;
+    }
+
+    const recognition = new (window.SpeechRecognition ||
+      window.webkitSpeechRecognition)();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = "en-US";
+
+    recognition.onstart = () => setIsListening(true);
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setModalData((prev) => ({
+        ...prev,
+        [field]: transcript,
+      }));
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error);
+      alert("Error: " + event.error);
+      toast.error(event.error);
+    };
+
+    recognition.onend = () => setIsListening(false);
+
+    recognition.start();
+  };
+
   return (
     <>
       {loading ? (
@@ -280,9 +314,9 @@ const GreetingCard = () => {
       ) : (
         <DndProvider backend={HTML5Backend}>
           {/* header */}
-          <div className="flex justify-between items-center w-full p-3 bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md  ">
+          <div className="flex justify-around items-center w-full bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md  ">
             {/* Left: Preview Box */}
-            <div className="bg-gray-300 rounded-md shadow-md flex items-center justify-center p-2 w-1/5">
+            <div className="bg-gray-300 rounded-md shadow-sm flex  p-1 w-1/5">
               <div
                 className="text-center p-1 rounded-md w-full transition-transform duration-300 flex flex-col items-center justify-center"
                 style={{
@@ -305,6 +339,19 @@ const GreetingCard = () => {
 
             {/* Right: Input Form */}
             <div className="w-2/3 flex items-center gap-3">
+              <button
+                onClick={() => {
+                  startListening("text");
+                }}
+                className={`p-2 rounded-lg transition ${
+                  isListening
+                    ? "bg-red-500 text-white"
+                    : "bg-gray-200 hover:bg-gray-300"
+                }`}
+              >
+                🎤
+              </button>
+
               <input
                 type="text"
                 className="p-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -314,6 +361,18 @@ const GreetingCard = () => {
                   setModalData({ ...modalData, text: e.target.value })
                 }
               />
+              <button
+                onClick={() => {
+                  startListening("name");
+                }}
+                className={`p-2 rounded-lg transition ${
+                  isListening
+                    ? "bg-red-500 text-white"
+                    : "bg-gray-200 hover:bg-gray-300"
+                }`}
+              >
+                🎤
+              </button>
               <input
                 type="text"
                 className="p-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
