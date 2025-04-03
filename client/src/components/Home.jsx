@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import Login from "./LogInScreen";
+import Card2 from "./Cards/Card2";
 
 const Home = () => {
   return (
@@ -17,6 +18,7 @@ const Home = () => {
           <Routes>
             <Route path="/Login" element={<Login />} />
             <Route path="/" element={<CardsList />} />
+            <Route path="/2" element={<Card2 />} />
             <Route path="/cards/:cardId" element={<GreetingCard />} />
           </Routes>
           <ToastContainer position="top-right" autoClose={2000} closeOnClick />

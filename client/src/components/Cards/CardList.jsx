@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Menu, Transition } from "@headlessui/react";
 import { colors, eventList } from "../../constants.json";
+import image from "../../assets/image.png";
 
 const CardItem = ({ card, onEdit, onDelete, navigate }) => (
   <div
@@ -23,7 +24,8 @@ const CardItem = ({ card, onEdit, onDelete, navigate }) => (
     onClick={() => navigate(`/cards/${card.cardId}`)}
   >
     <img
-      src={card.cardBackgroundUrl}
+      // src={card.cardBackgroundUrl}
+      src={image}
       alt={card.cardTitle}
       className="w-full h-48 object-cover"
     />
@@ -417,32 +419,32 @@ const CardsList = () => {
             type: "dropdown",
             options: eventList,
           },
-          {
-            label: "Background URL",
-            value: newCardBackgroundUrl,
-            setValue: setNewCardBackgroundUrl,
-            placeholder: "Enter Background URL",
-          },
+          // {
+          //   label: "Background URL",
+          //   value: newCardBackgroundUrl,
+          //   setValue: setNewCardBackgroundUrl,
+          //   placeholder: "Enter Background URL",
+          // },
           {
             label: "Receiver's Employee ID",
             value: receiverEmployeeId,
             setValue: setReceiverEmployeeId,
             placeholder: "Enter Receiver's Employee ID",
           },
-          {
-            label: "Greet Background Colour",
-            value: greetBackgroundColour,
-            setValue: setGreetBackgroundColour,
-            type: "dropdown",
-            options: colors,
-          },
-          {
-            label: "Greet Text Colour",
-            value: greetTextColour,
-            setValue: setGreetTextColour,
-            type: "dropdown",
-            options: colors,
-          },
+          // {
+          //   label: "Greet Background Colour",
+          //   value: greetBackgroundColour,
+          //   setValue: setGreetBackgroundColour,
+          //   type: "dropdown",
+          //   options: colors,
+          // },
+          // {
+          //   label: "Greet Text Colour",
+          //   value: greetTextColour,
+          //   setValue: setGreetTextColour,
+          //   type: "dropdown",
+          //   options: colors,
+          // },
         ]}
       />
     </div>

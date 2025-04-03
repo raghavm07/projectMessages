@@ -17,10 +17,9 @@ import {
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import GreetingCardSkeleton from "./CardSkeleton";
-import { Menu, Transition } from "@headlessui/react";
-import { HexColorPicker } from "react-colorful";
 import { SketchPicker } from "react-color";
 import { fontFamilies } from "../../constants.json";
+import image from "../../assets/image.png";
 
 const ItemType = {
   TEXT: "text",
@@ -28,7 +27,6 @@ const ItemType = {
 
 const GreetingCard = () => {
   const { cardId } = useParams();
-  const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
   const [textItems, setTextItems] = useState([]);
@@ -145,7 +143,19 @@ const GreetingCard = () => {
           );
           toast.success("Greeting updated successfully.");
           setIsModalOpen(false);
-          setModalData(null);
+          setShowTextPicker(false);
+          setShowFont(false);
+          setShowBackgroundTextPicker(false);
+          setModalData({
+            text: "",
+            name: "",
+            backgroundColor: "white",
+            textColor: "black",
+            rotation: 0,
+            fontFamily: "inherit",
+            isBold: false,
+            isItalic: false,
+          });
         })
         .catch(() => toast.error("Failed to update greeting."));
     } else {
@@ -171,7 +181,19 @@ const GreetingCard = () => {
           setTextItems((prev) => [...prev, response.data.data]);
           toast.success("Greeting added successfully.");
           setIsModalOpen(false);
-          setModalData(null);
+          setShowTextPicker(false);
+          setShowFont(false);
+          setShowBackgroundTextPicker(false);
+          setModalData({
+            text: "",
+            name: "",
+            backgroundColor: "white",
+            textColor: "black",
+            rotation: 0,
+            fontFamily: "inherit",
+            isBold: false,
+            isItalic: false,
+          });
         })
         .catch(() => toast.error("Failed to add greeting."));
     }
@@ -182,32 +204,6 @@ const GreetingCard = () => {
       type: ItemType.TEXT,
       item: { id: item.greetingId },
     });
-
-    // const handleMouseDown = () => setIsRotating(true);
-    // const handleMouseUp = () => setIsRotating(false);
-
-    // const handleMouseDown = (e) => {
-    //   e.stopPropagation(); // Prevents triggering other events.
-    //   setIsRotating(item.greetingId); // Set the rotating item.
-    // };
-
-    // const handleMouseUp = (e) => {
-    //   e.stopPropagation();
-    //   setIsRotating(null); // Stop rotating.
-    //   moveTextItem(item.greetingId, item.x, item.y, rotation); // Save rotation.
-    // };
-
-    // const handleMouseMove = (e) => {
-    //   if (isRotating) {
-    //     const rect = e.target.getBoundingClientRect();
-    //     const centerX = rect.left + rect.width / 2;
-    //     const centerY = rect.top + rect.height / 2;
-    //     const angle =
-    //       Math.atan2(e.clientY - centerY, e.clientX - centerX) *
-    //       (180 / Math.PI);
-    //     setRotation(angle);
-    //   }
-    // };
 
     return (
       <div
@@ -226,17 +222,7 @@ const GreetingCard = () => {
           fontFamily: item.fontFamily,
           transform: `rotate(${item.rotation}deg)`,
         }}
-        // onMouseMove={handleMouseMove}
-        // onMouseUp={handleMouseUp}
       >
-        {/* <div
-          onMouseDown={handleMouseDown}
-          onMouseUp={handleMouseUp}
-          className="absolute top-0 left-0 bg-blue-500 text-white p-1 rounded-full cursor-pointer hidden
-          group-hover:block"
-        >
-          <RotateCcw size={16} className="text-white" />
-        </div> */}
         <div className="flex flex-col">
           <span>{item.message}</span>
           <span className="text-sm mt-1">-{item.senderName}</span>
@@ -287,225 +273,246 @@ const GreetingCard = () => {
     },
   });
 
-  const handleDownload = async () => {
-    if (!containerRef.current) {
-      toast.error("Unable to download the card.");
-      return;
-    }
-
-    setDownloading(true);
-
-    // Save original dimensions
-    const originalWidth = containerRef.current.style.width;
-    const originalHeight = containerRef.current.style.height;
-
-    // Increase dimensions by 100px
-    containerRef.current.style.width = `${
-      containerRef.current.offsetWidth + 100
-    }px`;
-    containerRef.current.style.height = `${
-      containerRef.current.offsetHeight + 100
-    }px`;
-
-    try {
-      // Capture the updated size
-      const image = await toPng(containerRef.current);
-
-      // Reset to original dimensions
-      containerRef.current.style.width = originalWidth;
-      containerRef.current.style.height = originalHeight;
-
-      download(image, `${title || "greeting-card"}.png`);
-      toast.success("Card downloaded successfully!");
-    } catch (error) {
-      toast.error("Failed to download the card.", error);
-    } finally {
-      // Ensure dimensions are reset in case of error
-      containerRef.current.style.width = originalWidth;
-      containerRef.current.style.height = originalHeight;
-      setDownloading(false);
-    }
-  };
-
-  const handleSizeDecrease = async () => {
-    const newHeight = cardHeight - 100;
-    const newWidth = cardWidth - 100;
-
-    if (newHeight < 600 || newWidth < 800) {
-      return toast.warn("Minimum height and width should be maintained");
-    }
-
-    setCardWidth(newWidth);
-    setCardHeight(newHeight);
-
-    try {
-      await axios.put(`${API_BASE_URL}/cards/${cardId}`, {
-        height: newHeight,
-        width: newWidth,
-      });
-      toast.success("Card size updated successfully!");
-    } catch (error) {
-      toast.error("Error updating card size:", error);
-    }
-  };
-
-  const handleSizeIncrease = async () => {
-    if (cardHeight == 1100 || cardWidth == 1300) {
-      return toast.warn("Height or Width is already increased to maximum");
-    }
-
-    const newHeight = cardHeight + 100;
-    const newWidth = cardWidth + 100;
-
-    setCardWidth(newWidth);
-    setCardHeight(newHeight);
-
-    try {
-      await axios.put(`${API_BASE_URL}/cards/${cardId}`, {
-        height: newHeight,
-        width: newWidth,
-      });
-      toast.success("Card size updated successfully!");
-    } catch (error) {
-      toast.error("Error updating card size:", error);
-    }
-  };
-  const handleResize = async () => {
-    const newHeight = 600;
-    const newWidth = 800;
-
-    if (cardHeight == 600 || cardWidth == 800) {
-      return toast.error("Minimum height and width is already applied");
-    }
-
-    setCardWidth(newWidth);
-    setCardHeight(newHeight);
-
-    try {
-      await axios.put(`${API_BASE_URL}/cards/${cardId}`, {
-        height: newHeight,
-        width: newWidth,
-      });
-      toast.success("Card size updated successfully!");
-    } catch (error) {
-      toast.error("Error updating card size:", error);
-    }
-  };
-
   return (
     <>
       {loading ? (
         <GreetingCardSkeleton />
       ) : (
         <DndProvider backend={HTML5Backend}>
-          <div className="flex flex-col items-center space-y-6 bg-gradient-to-br from-indigo-500 to-purple-600">
-            <div className="flex justify-between items-center w-full p-4">
-              <button
-                onClick={() => navigate("/")}
-                className="px-4 py-2 bg-white text-blue-600 font-semibold rounded-lg"
+          {/* header */}
+          <div className="flex justify-between items-center w-full p-3 bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md  ">
+            {/* Left: Preview Box */}
+            <div className="bg-gray-300 rounded-md shadow-md flex items-center justify-center p-2 w-1/5">
+              <div
+                className="text-center p-1 rounded-md w-full transition-transform duration-300 flex flex-col items-center justify-center"
+                style={{
+                  backgroundColor: modalData?.backgroundColor || "white",
+                  color: modalData?.textColor || "black",
+                  transform: `rotate(${modalData?.rotation || 0}deg)`,
+                  fontFamily: modalData?.fontFamily || "inherit",
+                  fontWeight: modalData?.isBold ? "bold" : "normal",
+                  fontStyle: modalData?.isItalic ? "italic" : "normal",
+                }}
               >
-                Home
-              </button>
-              <h1 className="text-3xl font-bold text-white">{title}</h1>
-              <Menu
-                as="div"
-                className="relative inline-block text-left z-[999]"
-              >
-                <div>
-                  <Menu.Button className="inline-flex justify-center w-full px-4 py-2 bg-gray-800 text-white font-medium rounded-lg hover:bg-gray-900 shadow transition">
-                    Actions
-                    <ChevronDown className="w-5 h-5 ml-2" />
-                  </Menu.Button>
-                </div>
-                <Transition
-                  as={Fragment}
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
-                >
-                  <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <div className="py-1">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={handleResize}
-                            className={`${
-                              active
-                                ? "bg-yellow-500 text-white"
-                                : "text-gray-700"
-                            } group flex items-center w-full px-4 py-2 text-sm space-x-2`}
-                          >
-                            <RefreshCw className="w-4 h-4" />
-                            <span>Reset Size</span>
-                          </button>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={handleSizeIncrease}
-                            className={`${
-                              active
-                                ? "bg-green-600 text-white"
-                                : "text-gray-700"
-                            } group flex items-center w-full px-4 py-2 text-sm space-x-2`}
-                          >
-                            <Plus className="w-4 h-4" />
-                            <span>Increase Size</span>
-                          </button>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={handleSizeDecrease}
-                            className={`${
-                              active ? "bg-red-600 text-white" : "text-gray-700"
-                            } group flex items-center w-full px-4 py-2 text-sm space-x-2`}
-                          >
-                            <Minus className="w-4 h-4" />
-                            <span>Decrease Size</span>
-                          </button>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={handleDownload}
-                            className={`${
-                              active ? "bg-black text-white" : "text-gray-700"
-                            } group flex items-center w-full px-4 py-2 text-sm space-x-2`}
-                          >
-                            <Download className="w-4 h-4" />
-                            <span>Download</span>
-                          </button>
-                        )}
-                      </Menu.Item>
-                    </div>
-                  </Menu.Items>
-                </Transition>
-              </Menu>
+                <p className="text-lg text-center">
+                  {modalData?.text || "Your message here..."}
+                </p>
+                <p className="text-sm mt-1 text-center">
+                  - {modalData?.name || "Sender"}
+                </p>
+              </div>
             </div>
 
-            {downloading && (
-              <div className="fixed inset-[-5vh] bg-black bg-opacity-50 flex justify-center items-center z-50">
-                <div className="text-white text-xl">Downloading...</div>
-              </div>
-            )}
+            {/* Right: Input Form */}
+            <div className="w-2/3 flex items-center gap-3">
+              <input
+                type="text"
+                className="p-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Message"
+                value={modalData?.text}
+                onChange={(e) =>
+                  setModalData({ ...modalData, text: e.target.value })
+                }
+              />
+              <input
+                type="text"
+                className="p-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Sender"
+                value={modalData?.name}
+                onChange={(e) =>
+                  setModalData({ ...modalData, name: e.target.value })
+                }
+              />
 
+              {/* Formatting Controls */}
+              <button
+                onClick={() =>
+                  setModalData({ ...modalData, isBold: !modalData?.isBold })
+                }
+                className={`p-2 rounded-lg transition ${
+                  modalData?.isBold
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-200 hover:bg-gray-300"
+                }`}
+              >
+                <strong>B</strong>
+              </button>
+              <button
+                onClick={() =>
+                  setModalData({ ...modalData, isItalic: !modalData?.isItalic })
+                }
+                className={`p-2 rounded-lg transition ${
+                  modalData?.isItalic
+                    ? "bg-blue-600 text-white italic"
+                    : "bg-gray-200 hover:bg-gray-300"
+                }`}
+              >
+                <em>I</em>
+              </button>
+              <button
+                onClick={() =>
+                  setModalData({
+                    ...modalData,
+                    rotation: (modalData?.rotation || 0) - 10,
+                  })
+                }
+                className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition"
+              >
+                ↺
+              </button>
+              <button
+                onClick={() =>
+                  setModalData({
+                    ...modalData,
+                    rotation: (modalData?.rotation || 0) + 10,
+                  })
+                }
+                className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition"
+              >
+                ↻
+              </button>
+
+              {/* Font Picker */}
+              <div
+                className="p-2 border rounded-lg cursor-pointer bg-gray-200 hover:bg-gray-300"
+                onClick={() => {
+                  setShowFont(!showFont);
+                  setShowTextPicker(false);
+                  setShowBackgroundTextPicker(false);
+                }}
+              >
+                F
+              </div>
+
+              {/* Color Pickers */}
+              <div
+                className="p-2 bg-gray-200 hover:bg-gray-300 cursor-pointer rounded-lg transition "
+                onClick={() => {
+                  setShowTextPicker(!showTextPicker);
+                  setShowFont(false);
+                  setShowBackgroundTextPicker(false);
+                }}
+              >
+                T
+              </div>
+
+              <div
+                className="p-2 bg-gray-200 hover:bg-gray-300 cursor-pointer rounded-lg transition"
+                onClick={() => {
+                  setShowBackgroundTextPicker(!showBackgroundTextPicker);
+                  setShowFont(false);
+                  setShowTextPicker(false);
+                }}
+              >
+                BG
+              </div>
+
+              {/* Action Buttons */}
+              <button
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setModalData({
+                    text: "",
+                    name: "",
+                    backgroundColor: "white",
+                    textColor: "black",
+                    rotation: 0,
+                    fontFamily: "inherit",
+                    isBold: false,
+                    isItalic: false,
+                  });
+                }}
+                className="bg-black text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-600 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveModal}
+                className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+          {/* Font Dropdown */}
+          {showFont && (
+            <div className="absolute left-1/2 transform -translate-x-1/2 z-50 mt-2 bg-gray-200 shadow-lg p-3 rounded-lg border w-fit">
+              <div className="flex justify-between items-center mb-2 ">
+                <label className="text-xs font-medium">Font</label>
+                <button onClick={() => setShowFont(false)}>❌</button>
+              </div>
+              <div className="w-40 bg-white border rounded-lg shadow-lg max-h-40 overflow-y-auto">
+                {fontFamilies.map((font) => (
+                  <div
+                    key={font.value}
+                    className="p-2 text-xs hover:bg-blue-100 cursor-pointer"
+                    style={{ fontFamily: font.value }}
+                    onClick={() => {
+                      setModalData({
+                        ...modalData,
+                        fontFamily: font.value,
+                      });
+                      setShowFont(false);
+                    }}
+                  >
+                    {font.label}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Text Color Picker */}
+          {showTextPicker && (
+            <div className="absolute left-1/2 transform -translate-x-1/2 z-50 mt-2 bg-gray-200 shadow-lg p-3 rounded-lg border w-fit">
+              <div className="flex justify-between items-center mb-2 ">
+                <label className="text-xs font-medium">Text Color</label>
+                <button onClick={() => setShowTextPicker(false)}>❌</button>
+              </div>
+              <SketchPicker
+                color={modalData?.textColor}
+                onChange={(color) =>
+                  setModalData({ ...modalData, textColor: color.hex })
+                }
+              />
+            </div>
+          )}
+
+          {/* Background Color Picker */}
+          {showBackgroundTextPicker && (
+            <div className="absolute left-1/2 transform -translate-x-1/2 z-50 mt-2 bg-gray-200 shadow-lg p-3 rounded-lg border w-fit">
+              <div className="flex justify-between items-center mb-2 ">
+                <label className="text-xs font-medium">BG Color</label>
+                <button onClick={() => setShowBackgroundTextPicker(false)}>
+                  ❌
+                </button>
+              </div>
+              <SketchPicker
+                color={modalData?.backgroundColor}
+                onChange={(color) =>
+                  setModalData({
+                    ...modalData,
+                    backgroundColor: color.hex,
+                  })
+                }
+              />
+            </div>
+          )}
+
+          <div className="flex flex-col items-center space-y-6 bg-gradient-to-br from-indigo-500 to-purple-600 ">
             <div
               ref={(node) => {
                 containerRef.current = node;
                 drop(node);
               }}
-              className="relative bg-white rounded-lg shadow-lg"
+              className="relative bg-white rounded-lg shadow-lg mt-2"
               style={{
                 height: `${cardHeight}px`,
                 width: `${cardWidth}px`,
-                background: `url(${cardBackground}) center/cover no-repeat`,
+                backgroundImage: `url(${image})`,
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
               }}
               onClick={(e) => {
                 const rect = e.currentTarget.getBoundingClientRect();
@@ -526,310 +533,6 @@ const GreetingCard = () => {
               ))}
             </div>
           </div>
-
-          {isModalOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-8">
-              <div className="bg-gray-100 rounded-xl shadow-xl p-8 w-full max-w-5xl">
-                <h3 className="text-2xl font-bold mb-6 text-center ">
-                  {modalData.greetingId ? "Edit Greeting" : "Add Greeting"}
-                </h3>
-                <div className=" flex gap-6">
-                  {/* Form Fields */}
-                  <div className="w-1/2 flex flex-col space-y-6">
-                    {/*Preview (*/}
-                    <div className="   bottom-4 right-4 p-6 rounded-lg shadow-lg  bg-gray-300 z-40">
-                      <div
-                        className="w-full text-center"
-                        style={{
-                          backgroundColor: modalData.backgroundColor,
-                          color: modalData.textColor,
-                          transform: `rotate(${modalData.rotation}deg)`,
-                          fontFamily: modalData.fontFamily || "inherit",
-                          fontWeight: modalData.isBold ? "bold" : "normal",
-                          fontStyle: modalData.isItalic ? "italic" : "normal",
-                        }}
-                      >
-                        <p className="text-lg ">
-                          {modalData.text || "Your message here..."}
-                        </p>
-                        <p className="text-sm mt-2">{`- ${
-                          modalData.name || "Sender"
-                        }`}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/*  Form Fields */}
-                  <div
-                    className="w-1/2 flex flex-col "
-                    tabIndex={0}
-                    onBlur={(e) => {
-                      if (!e.currentTarget.contains(e.relatedTarget)) {
-                        setShowFont(false);
-                        setShowTextPicker(false);
-                        setShowBackgroundTextPicker(false);
-                      }
-                    }}
-                  >
-                    <div>
-                      {/* font Dropdown Menu  */}
-                      {showFont && (
-                        <div className="absolute z-50 mt-2 bg-gray-200 shadow-lg p-3 rounded-md border border-gray-300">
-                          {/* Header: Label & Close Button */}
-                          <div className="flex justify-between items-center mb-2">
-                            <label className="text-sm text-gray-700 font-medium">
-                              Font
-                            </label>
-                            <button
-                              className="text-gray-500 hover:text-red-500 transition"
-                              onClick={() => setShowFont(false)}
-                            >
-                              ❌
-                            </button>
-                          </div>
-
-                          {/* Dropdown Options */}
-                          <div className="w-44 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                            {fontFamilies.map((font) => (
-                              <div
-                                key={font.value}
-                                className="p-3 text-sm hover:bg-blue-100 cursor-pointer transition font-medium"
-                                style={{ fontFamily: font.value }}
-                                onClick={() => {
-                                  setModalData((prev) => ({
-                                    ...prev,
-                                    fontFamily: font.value,
-                                  }));
-                                }}
-                              >
-                                {font.label}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Text Color picker */}
-                      <div className="flex flex-col w-1/2">
-                        {showTextPicker && (
-                          <div className="absolute z-50 mt-2 bg-gray-200 shadow-lg p-2 rounded-md">
-                            <div className="flex justify-between items-center mb-2">
-                              <label className="text-sm text-gray-700 font-medium mb-2">
-                                Text Color
-                              </label>
-                              <button
-                                className="text-sm text-gray-700 font-medium mb-2"
-                                onClick={() => setShowTextPicker(false)}
-                              >
-                                ❌
-                              </button>
-                            </div>
-                            <SketchPicker
-                              color={modalData.textColor}
-                              onChange={(color) =>
-                                setModalData((prev) => ({
-                                  ...prev,
-                                  textColor: color.hex,
-                                }))
-                              }
-                            />
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Background Color picker */}
-                      <div className="flex flex-col w-1/2">
-                        {showBackgroundTextPicker && (
-                          <div className="absolute z-50 mt-2 bg-gray-200 shadow-lg p-2 rounded-md">
-                            <div className="flex justify-between items-center mb-2">
-                              <label className="text-sm text-gray-700 font-medium mb-2">
-                                BG Color
-                              </label>
-                              <button
-                                className="text-sm text-gray-700 font-medium mb-2"
-                                onClick={() =>
-                                  setShowBackgroundTextPicker(false)
-                                }
-                              >
-                                ❌
-                              </button>
-                            </div>
-                            <SketchPicker
-                              color={modalData.backgroundColor}
-                              onChange={(color) =>
-                                setModalData((prev) => ({
-                                  ...prev,
-                                  backgroundColor: color.hex,
-                                }))
-                              }
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Top: Message Input */}
-                    <div className="flex flex-col">
-                      <label className="text-sm text-gray-700 font-medium mb-2">
-                        Message
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Enter message"
-                        value={modalData.text}
-                        maxLength={60}
-                        onChange={(e) =>
-                          setModalData((prev) => ({
-                            ...prev,
-                            text: e.target.value,
-                          }))
-                        }
-                        className="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
-                      />
-                    </div>
-
-                    {/* Top: Sender Name Input */}
-                    <div className="flex flex-col">
-                      <label className="text-sm text-gray-700 font-medium mb-2">
-                        Sender
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Enter sender name"
-                        value={modalData.name}
-                        onChange={(e) =>
-                          setModalData((prev) => ({
-                            ...prev,
-                            name: e.target.value,
-                          }))
-                        }
-                        className="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
-                      />
-                    </div>
-
-                    <div className="flex items-center space-x-4 mt-4">
-                      {/* Bold & Italic */}
-                      <button
-                        onClick={() =>
-                          setModalData((p) => ({ ...p, isBold: !p.isBold }))
-                        }
-                        className={`px-3 py-2 rounded-md transition ${
-                          modalData.isBold
-                            ? "bg-blue-500 text-white"
-                            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                        }`}
-                      >
-                        <strong>B</strong>
-                      </button>
-                      <button
-                        onClick={() =>
-                          setModalData((p) => ({ ...p, isItalic: !p.isItalic }))
-                        }
-                        className={`px-3 py-2 rounded-md transition ${
-                          modalData.isItalic
-                            ? "bg-blue-500 text-white italic"
-                            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                        }`}
-                      >
-                        <em>I</em>
-                      </button>
-
-                      {/* Rotation */}
-                      <button
-                        onClick={() =>
-                          setModalData((p) => ({
-                            ...p,
-                            rotation: (p.rotation || 0) - 10,
-                          }))
-                        }
-                        className="px-3 py-2 text-sm rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
-                      >
-                        ↺
-                      </button>
-                      {/* <label className="text-sm text-gray-700 font-medium">
-                        Rotate
-                      </label> */}
-                      <button
-                        onClick={() =>
-                          setModalData((p) => ({
-                            ...p,
-                            rotation: (p.rotation || 0) + 10,
-                          }))
-                        }
-                        className="px-3 py-2 text-sm rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
-                      >
-                        ↻
-                      </button>
-
-                      {/* Text & Background Color */}
-                      <div
-                        className="relative w-10 h-10 rounded-md border cursor-pointer flex items-center justify-center shadow-sm"
-                        style={{ backgroundColor: modalData.textColor }}
-                        onClick={() => {
-                          setShowTextPicker(!showTextPicker);
-                          setShowBackgroundTextPicker(false);
-                          setShowFont(false);
-                        }}
-                      >
-                        <span className="text-black font-medium text-xs">
-                          T
-                        </span>
-                      </div>
-                      <div
-                        className="relative w-10 h-10 rounded-md border cursor-pointer flex items-center justify-center shadow-sm"
-                        style={{ backgroundColor: modalData.backgroundColor }}
-                        onClick={() => {
-                          setShowBackgroundTextPicker(
-                            !showBackgroundTextPicker
-                          );
-                          setShowFont(false);
-                          setShowTextPicker(false);
-                        }}
-                      >
-                        <span className="text-black font-medium text-xs">
-                          BG
-                        </span>
-                      </div>
-                      <div className="relative">
-                        {/* Font Button */}
-                        <div
-                          className={`px-3 py-2 rounded-md cursor-pointer transition flex items-center justify-center shadow-md border ${
-                            showFont
-                              ? "bg-blue-500 text-white"
-                              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                          }`}
-                          style={{ fontFamily: modalData.fontFamily }}
-                          onClick={() => {
-                            setShowFont(!showFont);
-                            setShowTextPicker(false);
-                            setShowBackgroundTextPicker(false);
-                          }}
-                        >
-                          <span className="font-semibold text-sm">F</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex justify-end mt-8 space-x-4">
-                      <button
-                        onClick={() => setIsModalOpen(false)}
-                        className="bg-gray-400 text-white font-semibold px-6 py-2 rounded-lg hover:bg-gray-500 transition duration-200 text-sm"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        onClick={handleSaveModal}
-                        className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-lg shadow-md hover:bg-blue-600 transition duration-200 text-sm"
-                      >
-                        Save
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
         </DndProvider>
       )}
     </>
