@@ -13,6 +13,15 @@ import {
   Minus,
   Download,
   RotateCcw,
+  Mic,
+  Bold,
+  Italic,
+  RotateCw,
+  Type,
+  PaintBucket,
+  Baseline,
+  CircleX,
+  Save,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -234,7 +243,11 @@ const GreetingCard = () => {
               console.log(loggedInEmployeeId);
               console.log(item.employeeId);
               console.log("Edit button clicked!");
-              e.stopPropagation(); // Prevent parent click handlers.
+              e.stopPropagation();
+              window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+              });
               setModalData({
                 x: item.x,
                 y: item.y,
@@ -298,7 +311,7 @@ const GreetingCard = () => {
 
     recognition.onerror = (event) => {
       console.error("Speech recognition error:", event.error);
-      alert("Error: " + event.error);
+
       toast.error(event.error);
     };
 
@@ -314,7 +327,7 @@ const GreetingCard = () => {
       ) : (
         <DndProvider backend={HTML5Backend}>
           {/* header */}
-          <div className="flex justify-around items-center w-full bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md  ">
+          <div className="flex justify-around items-center w-full bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md p-1 ">
             {/* Left: Preview Box */}
             <div className="bg-gray-300 rounded-md shadow-sm flex  p-1 w-1/5">
               <div
@@ -328,85 +341,82 @@ const GreetingCard = () => {
                   fontStyle: modalData?.isItalic ? "italic" : "normal",
                 }}
               >
-                <p className="text-lg text-center">
+                <p className="text-xs text-center">
                   {modalData?.text || "Your message here..."}
-                </p>
-                <p className="text-sm mt-1 text-center">
-                  - {modalData?.name || "Sender"}
                 </p>
               </div>
             </div>
 
             {/* Right: Input Form */}
             <div className="w-2/3 flex items-center gap-3">
-              <button
-                onClick={() => {
-                  startListening("text");
-                }}
-                className={`p-2 rounded-lg transition ${
-                  isListening
-                    ? "bg-red-500 text-white"
-                    : "bg-gray-200 hover:bg-gray-300"
-                }`}
-              >
-                🎤
-              </button>
+              <div className="relative flex items-center w-full">
+                <input
+                  type="text"
+                  className="p-2 pl-3 pr-10 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                  placeholder="Message"
+                  value={modalData?.text}
+                  onChange={(e) =>
+                    setModalData({ ...modalData, text: e.target.value })
+                  }
+                />
+                <button
+                  onClick={() => {
+                    startListening("text");
+                  }}
+                  className={`absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full p-2 transition ${
+                    isListening
+                      ? "bg-red-500 text-white"
+                      : "bg-gray-200 hover:bg-gray-300"
+                  }`}
+                >
+                  <Mic size={16} strokeWidth={0.5} />
+                </button>
+              </div>
 
-              <input
-                type="text"
-                className="p-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Message"
-                value={modalData?.text}
-                onChange={(e) =>
-                  setModalData({ ...modalData, text: e.target.value })
-                }
-              />
-              <button
-                onClick={() => {
-                  startListening("name");
-                }}
-                className={`p-2 rounded-lg transition ${
-                  isListening
-                    ? "bg-red-500 text-white"
-                    : "bg-gray-200 hover:bg-gray-300"
-                }`}
-              >
-                🎤
-              </button>
-              <input
-                type="text"
-                className="p-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Sender"
-                value={modalData?.name}
-                onChange={(e) =>
-                  setModalData({ ...modalData, name: e.target.value })
-                }
-              />
+              <div className="relative flex items-center w-1/3">
+                <input
+                  type="text"
+                  className="p-2 pl-3 pr-10 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                  placeholder="Sender"
+                  value={modalData?.name}
+                  onChange={(e) =>
+                    setModalData({ ...modalData, name: e.target.value })
+                  }
+                />
+                <button
+                  onClick={() => {
+                    startListening("name");
+                  }}
+                  className={`absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full p-2 transition ${
+                    isListening
+                      ? "bg-red-500 text-white"
+                      : "bg-gray-200 hover:bg-gray-300"
+                  }`}
+                >
+                  <Mic size={16} strokeWidth={0.5} />
+                </button>
+              </div>
 
               {/* Formatting Controls */}
               <button
                 onClick={() =>
                   setModalData({ ...modalData, isBold: !modalData?.isBold })
                 }
-                className={`p-2 rounded-lg transition ${
-                  modalData?.isBold
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 hover:bg-gray-300"
+                className={`rounded-lg transition ${
+                  modalData?.isBold ? "bg-blue-600 text-white" : ""
                 }`}
               >
-                <strong>B</strong>
+                <Bold size={16} strokeWidth={0.5} absoluteStrokeWidth />
               </button>
               <button
                 onClick={() =>
                   setModalData({ ...modalData, isItalic: !modalData?.isItalic })
                 }
-                className={`p-2 rounded-lg transition ${
-                  modalData?.isItalic
-                    ? "bg-blue-600 text-white italic"
-                    : "bg-gray-200 hover:bg-gray-300"
+                className={`rounded-lg transition ${
+                  modalData?.isItalic ? "bg-blue-600 text-white italic" : ""
                 }`}
               >
-                <em>I</em>
+                <Italic size={16} strokeWidth={0.5} absoluteStrokeWidth />
               </button>
               <button
                 onClick={() =>
@@ -415,9 +425,9 @@ const GreetingCard = () => {
                     rotation: (modalData?.rotation || 0) - 10,
                   })
                 }
-                className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition"
+                className=" rounded-lg transition"
               >
-                ↺
+                <RotateCcw size={16} strokeWidth={0.5} absoluteStrokeWidth />
               </button>
               <button
                 onClick={() =>
@@ -426,44 +436,44 @@ const GreetingCard = () => {
                     rotation: (modalData?.rotation || 0) + 10,
                   })
                 }
-                className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition"
+                className="rounded-lg transition"
               >
-                ↻
+                <RotateCw size={16} strokeWidth={0.5} absoluteStrokeWidth />
               </button>
 
               {/* Font Picker */}
               <div
-                className="p-2 border rounded-lg cursor-pointer bg-gray-200 hover:bg-gray-300"
+                className="rounded-lg cursor-pointer"
                 onClick={() => {
                   setShowFont(!showFont);
                   setShowTextPicker(false);
                   setShowBackgroundTextPicker(false);
                 }}
               >
-                F
+                <Type size={16} strokeWidth={0.5} absoluteStrokeWidth />
               </div>
 
               {/* Color Pickers */}
               <div
-                className="p-2 bg-gray-200 hover:bg-gray-300 cursor-pointer rounded-lg transition "
+                className=" cursor-pointer rounded-lg transition "
                 onClick={() => {
                   setShowTextPicker(!showTextPicker);
                   setShowFont(false);
                   setShowBackgroundTextPicker(false);
                 }}
               >
-                T
+                <Baseline size={16} strokeWidth={0.5} absoluteStrokeWidth />
               </div>
 
               <div
-                className="p-2 bg-gray-200 hover:bg-gray-300 cursor-pointer rounded-lg transition"
+                className=" cursor-pointer rounded-lg transition"
                 onClick={() => {
                   setShowBackgroundTextPicker(!showBackgroundTextPicker);
                   setShowFont(false);
                   setShowTextPicker(false);
                 }}
               >
-                BG
+                <PaintBucket size={16} strokeWidth={0.5} absoluteStrokeWidth />
               </div>
 
               {/* Action Buttons */}
@@ -481,15 +491,15 @@ const GreetingCard = () => {
                     isItalic: false,
                   });
                 }}
-                className="bg-black text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-600 transition"
+                className="bg-red-700 text-white  rounded-lg text-sm hover:bg-red-600 transition"
               >
-                Cancel
+                <CircleX size={16} strokeWidth={0.5} absoluteStrokeWidth />
               </button>
               <button
                 onClick={handleSaveModal}
-                className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition"
+                className="bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition"
               >
-                Save
+                <Save size={16} strokeWidth={0.5} absoluteStrokeWidth />
               </button>
             </div>
           </div>
@@ -570,7 +580,7 @@ const GreetingCard = () => {
                 width: `${cardWidth}px`,
                 backgroundImage: `url(${image})`,
                 backgroundPosition: "center",
-                backgroundSize: "cover",
+                backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
               }}
               onClick={(e) => {

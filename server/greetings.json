@@ -18,22 +18,22 @@
         "isBold": false,
         "isItalic": false,
         "fontFamily": "'Montserrat', sans-serif",
-        "x": 110.03604125976562,
-        "y": 24.69964599609375,
+        "x": 181.81729125976562,
+        "y": 252.48089599609375,
         "rotation": 94.35940784434482,
         "backgroundColor": "#fc1111",
         "textColor": "#7ed321"
       },
       {
         "greetingId": "e068f0db-04f9-4b49-9b13-32f903b1fec4",
-        "message": "nnnn",
+        "message": "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
         "employeeId": "1234",
         "senderName": "nnmmm",
         "isBold": false,
         "isItalic": true,
         "fontFamily": "'Nunito', sans-serif",
-        "x": 582.5917358398438,
-        "y": 42.31852722167969,
+        "x": 562.7122802734375,
+        "y": 126.13758087158203,
         "rotation": 94.35940784434482,
         "backgroundColor": "#4825f1"
       },
@@ -47,8 +47,8 @@
         "fontFamily": "'Helvetica Neue', Arial, sans-serif",
         "backgroundColor": "#a3d6ad",
         "textColor": "#b161b1",
-        "x": 703.5,
-        "y": 168,
+        "x": 550.5,
+        "y": 397,
         "rotation": 0
       },
       {
@@ -62,8 +62,8 @@
         "backgroundColor": "#300fd3",
         "textColor": "#e9e958",
         "rotation": -380,
-        "x": 170.23348999023438,
-        "y": 219.97731018066406
+        "x": 30.342864990234375,
+        "y": 241.461669921875
       },
       {
         "greetingId": "965284cb-e6e4-4b6f-ab98-81ffb431394f",
@@ -76,8 +76,8 @@
         "backgroundColor": "#5f4242",
         "textColor": "#e43232",
         "rotation": -20,
-        "x": 356.5322265625,
-        "y": 8.69976806640625
+        "x": 224.7978515625,
+        "y": 45.04352569580078
       },
       {
         "greetingId": "88eed673-7815-43e0-b575-6fac6f0fa0ea",
@@ -90,8 +90,8 @@
         "backgroundColor": "#f1e02d",
         "textColor": "#3215c2",
         "rotation": -30,
-        "x": 416.65704345703125,
-        "y": 131.57666015625
+        "x": 145.61019897460938,
+        "y": 305.58839416503906
       },
       {
         "greetingId": "3ce99c8b-001c-45ac-8951-63ecab1682c8",
@@ -118,8 +118,8 @@
         "backgroundColor": "#d89191",
         "textColor": "black",
         "rotation": 0,
-        "x": 219,
-        "y": 60
+        "x": 301,
+        "y": 160
       },
       {
         "greetingId": "be843afc-6ce0-433b-8e77-01432431a175",
@@ -130,8 +130,8 @@
         "isItalic": false,
         "fontFamily": "'Times New Roman', Times, serif",
         "textColor": "#6552bd",
-        "x": 532.5,
-        "y": 74
+        "x": 408.5,
+        "y": 51
       },
       {
         "greetingId": "1732ab22-30bf-4fff-91a3-a86491837ed3",
@@ -143,6 +143,48 @@
         "backgroundColor": "#3e18f3",
         "x": 50,
         "y": 50
+      },
+      {
+        "greetingId": "03b8729d-f1fd-48ea-97f5-7a020867a155",
+        "message": "raghav",
+        "employeeId": "1234",
+        "senderName": "mittal",
+        "isBold": true,
+        "isItalic": true,
+        "fontFamily": "'Courier New', Courier, monospace",
+        "backgroundColor": "#8b83c3",
+        "textColor": "#4a2ce0",
+        "rotation": -10,
+        "x": 212.75048828125,
+        "y": 387.3776550292969
+      },
+      {
+        "greetingId": "1317063a-da35-4c38-ae6b-3cc5583a0aea",
+        "message": "excc",
+        "employeeId": "1234",
+        "senderName": "cddccd",
+        "isBold": true,
+        "isItalic": false,
+        "fontFamily": "inherit",
+        "backgroundColor": "#f8e71c",
+        "textColor": "#e42a2a",
+        "rotation": 10,
+        "x": 144.50994873046875,
+        "y": 102.20280456542969
+      },
+      {
+        "greetingId": "8f860e3a-f679-472d-83f6-f9a91cb230a2",
+        "message": "raghav",
+        "employeeId": "1234",
+        "senderName": "Hello",
+        "isBold": false,
+        "isItalic": false,
+        "fontFamily": "inherit",
+        "backgroundColor": "#a81b1b",
+        "textColor": "#e4970f",
+        "rotation": 0,
+        "x": 697,
+        "y": 208
       }
     ]
   },
@@ -165,8 +207,8 @@
         "isBold": false,
         "isItalic": false,
         "fontFamily": "'Roboto', sans-serif",
-        "x": 93.5390625,
-        "y": 396.3984375,
+        "x": 316.53125,
+        "y": 397.390625,
         "backgroundColor": "#F5F5DC",
         "textColor": "#0000FF"
       },
@@ -177,8 +219,8 @@
         "senderName": " Raghav",
         "isBold": false,
         "isItalic": false,
-        "x": 0,
-        "y": 280,
+        "x": 7,
+        "y": 339,
         "backgroundColor": "#5353df",
         "textColor": "#71062d",
         "fontFamily": "'Roboto', sans-serif",
@@ -192,24 +234,24 @@
         "isBold": true,
         "isItalic": true,
         "fontFamily": "'Lato', sans-serif",
-        "x": 356.5,
-        "y": 55,
-        "backgroundColor": "#e72d2d",
+        "x": 350.00091552734375,
+        "y": 112.305908203125,
+        "backgroundColor": "#50e3c2",
         "textColor": "#301a0f",
-        "rotation": 170
+        "rotation": 350
       },
       {
         "greetingId": "ca423860-57b7-4507-8458-606625606fbb",
-        "message": "Happy Happy Birthday !!!👏👏🎯🎯🎯🎯🎯",
+        "message": "Happy Happy Birthday !!!👏👏",
         "employeeId": "1234",
         "senderName": "Naman",
         "isBold": true,
         "isItalic": false,
-        "x": 223.5,
-        "y": 170,
-        "backgroundColor": "transparent",
+        "x": 133.98715209960938,
+        "y": 208.2841796875,
+        "backgroundColor": "#7ed321",
         "textColor": "#483D8B",
-        "rotation": 0
+        "rotation": -20
       },
       {
         "greetingId": "54136052-5d9e-45ff-9815-1df4f00ad4a7",
@@ -220,8 +262,8 @@
         "isItalic": false,
         "backgroundColor": "transparent",
         "textColor": "#A52A2A",
-        "x": 502.5,
-        "y": 0
+        "x": 841.5,
+        "y": 173
       },
       {
         "greetingId": "550a1495-c34e-4746-916e-f8ec767ed36f",
@@ -230,10 +272,10 @@
         "senderName": "Raghav Mittal",
         "isBold": false,
         "isItalic": false,
-        "backgroundColor": "#404040",
+        "backgroundColor": "#db1111",
         "textColor": "#111002",
-        "x": 126,
-        "y": 21,
+        "x": 83,
+        "y": 2,
         "fontFamily": "'Roboto', sans-serif",
         "rotation": 0
       },
@@ -245,10 +287,11 @@
         "isBold": true,
         "isItalic": true,
         "fontFamily": "'Nunito', sans-serif",
-        "backgroundColor": "transparent",
+        "backgroundColor": "#9b9b9b",
         "textColor": "#00008B",
-        "x": 333.484375,
-        "y": 455.984375
+        "x": 550.484375,
+        "y": 494.984375,
+        "rotation": 0
       },
       {
         "greetingId": "3ce3e6d3-c589-4b08-a080-5ba879ba55f8",
@@ -277,14 +320,14 @@
       },
       {
         "greetingId": "4b26f3c9-22f9-47ea-bb40-7698d7a33c76",
-        "message": "nnnnn",
+        "message": "party kab hai bhai janmdin mubarak ho",
         "employeeId": "1234",
         "senderName": "nnn",
         "isBold": false,
         "isItalic": false,
         "fontFamily": "'Times New Roman', Times, serif",
-        "x": 749.484375,
-        "y": 84.046875,
+        "x": 9.484375,
+        "y": 453.046875,
         "rotation": 0
       },
       {
@@ -297,9 +340,9 @@
         "fontFamily": "'Helvetica Neue', Arial, sans-serif",
         "backgroundColor": "#a09595",
         "textColor": "#734040",
-        "rotation": 0,
-        "x": 498.15618896484375,
-        "y": 291.9986877441406
+        "rotation": -20,
+        "x": 889.140625,
+        "y": 571.984375
       },
       {
         "greetingId": "664ca1ae-4d8f-46d9-b52a-4388fcc1cd79",
@@ -311,8 +354,8 @@
         "backgroundColor": "#804545",
         "textColor": "#171711",
         "rotation": -350,
-        "x": 756.3230590820312,
-        "y": 4.272552490234375
+        "x": 865.861572265625,
+        "y": 1.5976409912109375
       },
       {
         "greetingId": "a85aa023-d255-4c31-b5d5-697b18eb459a",
@@ -323,22 +366,22 @@
         "isItalic": false,
         "backgroundColor": "#8a8a9f",
         "textColor": "#230f87",
-        "x": 84,
-        "y": 107
+        "x": 33,
+        "y": 124
       },
       {
         "greetingId": "a7b0cd11-0550-4f50-8594-fbbc2b71353a",
         "message": "Happy Birthday 👏👏👏",
         "employeeId": "1234",
-        "senderName": "Raghav",
+        "senderName": "Shivam",
         "isBold": true,
         "isItalic": true,
         "fontFamily": "'Times New Roman', Times, serif",
         "backgroundColor": "#f8e71c",
         "textColor": "#3e24c8",
-        "rotation": -60,
-        "x": 609.40087890625,
-        "y": 494.6969451904297
+        "rotation": -100,
+        "x": 867.4218292236328,
+        "y": 400.6092224121094
       },
       {
         "greetingId": "51c64cd5-9cb6-4029-a7f5-b3e68066e3c3",
@@ -347,12 +390,12 @@
         "senderName": "dede",
         "isBold": false,
         "isItalic": false,
-        "x": 713.5,
-        "y": 195
+        "x": 345.5,
+        "y": 560
       },
       {
         "greetingId": "2eec9742-b275-47f0-b43f-a4caf537e6ea",
-        "message": "Raghav2",
+        "message": "happy birthday bro",
         "employeeId": "1234",
         "senderName": "Mittal2",
         "isBold": false,
@@ -360,8 +403,9 @@
         "fontFamily": "'Times New Roman', Times, serif",
         "backgroundColor": "#eb8a36",
         "textColor": "#3e1df1",
-        "x": 572.5,
-        "y": 127
+        "x": 29.5,
+        "y": 521,
+        "rotation": 0
       },
       {
         "greetingId": "8d824e8a-67a4-4264-a606-aef34bff8fb7",
@@ -370,8 +414,8 @@
         "senderName": "dddddd",
         "isBold": false,
         "isItalic": false,
-        "x": 50,
-        "y": 50
+        "x": 6,
+        "y": 2
       },
       {
         "greetingId": "ca558a4d-2f16-49e5-a666-bbee36fba7e3",
@@ -381,10 +425,10 @@
         "isBold": false,
         "isItalic": false,
         "fontFamily": "'Times New Roman', Times, serif",
-        "backgroundColor": "#1e0c79",
+        "backgroundColor": "#ffffff",
         "textColor": "#644edd",
-        "x": 472,
-        "y": 72,
+        "x": 404,
+        "y": 34,
         "rotation": 0
       },
       {
@@ -395,8 +439,8 @@
         "isBold": false,
         "isItalic": false,
         "rotation": 380,
-        "x": 334.8765563964844,
-        "y": 219.75306701660156
+        "x": 444.3140563964844,
+        "y": 173.1280517578125
       },
       {
         "greetingId": "89125ba0-2027-4415-8778-023f693e81ee",
@@ -409,8 +453,8 @@
         "backgroundColor": "#8a81b6",
         "textColor": "#27128d",
         "rotation": 180,
-        "x": 853.5,
-        "y": 58
+        "x": 811.5,
+        "y": 5
       },
       {
         "greetingId": "617f7970-67d9-435d-b032-35e56673d8f2",
@@ -419,8 +463,8 @@
         "senderName": "Ram",
         "isBold": true,
         "isItalic": false,
-        "x": 541,
-        "y": 214
+        "x": 842,
+        "y": 235
       },
       {
         "greetingId": "3610d0c4-64fe-4721-b981-7bcf4f7b9fa5",
@@ -431,8 +475,57 @@
         "isItalic": false,
         "fontFamily": "'Times New Roman', Times, serif",
         "rotation": -40,
-        "x": 686.5,
-        "y": 308
+        "x": 887.2633666992188,
+        "y": 142.22288513183594
+      },
+      {
+        "greetingId": "3d104675-59c8-4e7e-b1f2-7a5e4aedd3ea",
+        "message": "how are you doing hello hello bye bye Si u",
+        "employeeId": "1234",
+        "senderName": " Sonali",
+        "isBold": false,
+        "isItalic": false,
+        "x": 677,
+        "y": 653,
+        "backgroundColor": "#7d6ace",
+        "rotation": 0
+      },
+      {
+        "greetingId": "5f6ef55f-a857-4d22-95da-939b2b6ca1e0",
+        "message": "wish you all the success",
+        "employeeId": "1234",
+        "senderName": "amresh",
+        "isBold": false,
+        "isItalic": false,
+        "fontFamily": "inherit",
+        "backgroundColor": "#0a0202",
+        "textColor": "#f51919",
+        "rotation": 0,
+        "x": 0,
+        "y": 662
+      },
+      {
+        "greetingId": "980e8eea-c465-4757-af97-d228761df63b",
+        "message": "HBD",
+        "employeeId": "1234",
+        "senderName": "Amresh",
+        "isBold": false,
+        "isItalic": false,
+        "backgroundColor": "#3f1ceb",
+        "x": 41.641510009765625,
+        "y": 207.08282470703125,
+        "rotation": -50
+      },
+      {
+        "greetingId": "39a7e355-92c4-4ffa-9508-a614c3400cf9",
+        "message": "gvsxgxs sxvvsxvzg",
+        "employeeId": "1234",
+        "senderName": "ggggggg",
+        "isBold": false,
+        "isItalic": false,
+        "rotation": 90,
+        "x": 211.234375,
+        "y": 75.265625
       }
     ]
   },
@@ -498,6 +591,57 @@
         "backgroundColor": "#d3c852",
         "textColor": "#312e38",
         "rotation": -20
+      }
+    ]
+  },
+  {
+    "cardId": "eec63c1c-1871-4429-9d10-56c6ea57141a",
+    "cardBackgroundUrl": "",
+    "cardTitle": "wwww",
+    "ReciverEmployeeId": "wwww",
+    "height": 600,
+    "width": 800,
+    "eventType": "Work Anniversary",
+    "greetBackgroundColour": "",
+    "greetTextColour": "",
+    "greetings": [
+      {
+        "greetingId": "badcef87-1ea1-4b1c-92e2-6cc554bd32d2",
+        "message": "Happiest Birthday raghav Happiest Birthday raghav",
+        "employeeId": "1234",
+        "senderName": "Amresh",
+        "isBold": false,
+        "isItalic": false,
+        "fontFamily": "'Courier New', Courier, monospace",
+        "backgroundColor": "#ffffff",
+        "textColor": "#4125c5",
+        "rotation": 0,
+        "x": 186.4921875,
+        "y": 262.4609375
+      },
+      {
+        "greetingId": "592f3fe2-6399-488b-a947-1b27c46dc17f",
+        "message": "happiest birthday Raghav",
+        "employeeId": "1234",
+        "senderName": " Amresh",
+        "isBold": false,
+        "isItalic": false,
+        "x": 34.5,
+        "y": 32
+      },
+      {
+        "greetingId": "29481a2a-8ecc-493c-822d-c1f89c43a517",
+        "message": "hello hello hello hello hello hello hay how r u",
+        "employeeId": "1234",
+        "senderName": "Somesh",
+        "isBold": false,
+        "isItalic": false,
+        "fontFamily": "'Times New Roman', Times, serif",
+        "backgroundColor": "#3316b8",
+        "textColor": "#eae9f0",
+        "rotation": 10,
+        "x": 364.5,
+        "y": 100
       }
     ]
   }
