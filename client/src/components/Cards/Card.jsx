@@ -215,7 +215,10 @@ const GreetingCard = () => {
       type: ItemType.TEXT,
       item: { id: item.greetingId },
     });
-
+    let movement =
+      modalData.greetingId == item.greetingId
+        ? modalData?.rotation
+        : item.rotation;
     return (
       <div
         ref={drag}
@@ -231,7 +234,13 @@ const GreetingCard = () => {
           fontWeight: item.isBold ? "bold" : "lighter",
           fontStyle: item.isItalic ? "italic" : "normal",
           fontFamily: item.fontFamily,
-          transform: `rotate(${item.rotation}deg)`,
+          // transform: `rotate(${item.rotation}deg)`,
+
+          transform: `rotate(${
+            modalData.greetingId === item.greetingId
+              ? modalData?.rotation || 0
+              : item.rotation || 0
+          }deg)`,
         }}
       >
         <div className="flex flex-col">
