@@ -184,7 +184,7 @@ router.post("/", (req, res) => {
     width = 800,
     greetings,
     eventType,
-    greetBackgroundColour = "white",
+    greetBackgroundColour = "tranparent",
     greetTextColour = "black",
   } = req.body;
 

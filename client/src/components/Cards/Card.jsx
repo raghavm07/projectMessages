@@ -50,7 +50,7 @@ const GreetingCard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showFont, setShowFont] = useState(false);
   const [showTextPicker, setShowTextPicker] = useState(false);
-  const [isListening, setIsListening] = useState(false);
+  const [isListening, setIsListening] = useState("");
   const [showBackgroundTextPicker, setShowBackgroundTextPicker] =
     useState(false);
 
@@ -151,7 +151,7 @@ const GreetingCard = () => {
                 : item
             )
           );
-          toast.success("Greeting updated successfully.");
+
           setIsModalOpen(false);
           setShowTextPicker(false);
           setShowFont(false);
@@ -159,13 +159,14 @@ const GreetingCard = () => {
           setModalData({
             text: "",
             name: "",
-            backgroundColor: "white",
+            backgroundColor: "transparent",
             textColor: "black",
             rotation: 0,
             fontFamily: "inherit",
             isBold: false,
             isItalic: false,
           });
+          toast.success("Greeting updated successfully.");
         })
         .catch(() => toast.error("Failed to update greeting."));
     } else {
@@ -197,7 +198,7 @@ const GreetingCard = () => {
           setModalData({
             text: "",
             name: "",
-            backgroundColor: "white",
+            backgroundColor: "transparent",
             textColor: "black",
             rotation: 0,
             fontFamily: "inherit",
@@ -299,7 +300,7 @@ const GreetingCard = () => {
     recognition.interimResults = false;
     recognition.lang = "en-US";
 
-    recognition.onstart = () => setIsListening(true);
+    recognition.onstart = () => setIsListening(field);
 
     recognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
@@ -315,9 +316,49 @@ const GreetingCard = () => {
       toast.error(event.error);
     };
 
-    recognition.onend = () => setIsListening(false);
+    recognition.onend = () => setIsListening("");
 
     recognition.start();
+  };
+
+  const handleDownload = async () => {
+    if (!containerRef.current) {
+      toast.error("Unable to download the card.");
+      return;
+    }
+
+    setDownloading(true);
+
+    // Save original dimensions
+    const originalWidth = containerRef.current.style.width;
+    const originalHeight = containerRef.current.style.height;
+
+    // Increase dimensions by 100px
+    containerRef.current.style.width = `${
+      containerRef.current.offsetWidth + 100
+    }px`;
+    containerRef.current.style.height = `${
+      containerRef.current.offsetHeight + 100
+    }px`;
+
+    try {
+      // Capture the updated size
+      const image = await toPng(containerRef.current);
+
+      // Reset to original dimensions
+      containerRef.current.style.width = originalWidth;
+      containerRef.current.style.height = originalHeight;
+
+      download(image, `${title || "greeting-card"}.png`);
+      toast.success("Card downloaded successfully!");
+    } catch (error) {
+      toast.error("Failed to download the card.", error);
+    } finally {
+      // Ensure dimensions are reset in case of error
+      containerRef.current.style.width = originalWidth;
+      containerRef.current.style.height = originalHeight;
+      setDownloading(false);
+    }
   };
 
   return (
@@ -327,13 +368,14 @@ const GreetingCard = () => {
       ) : (
         <DndProvider backend={HTML5Backend}>
           {/* header */}
-          <div className="flex justify-around items-center w-full bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md p-1 ">
+
+          <div className="flex justify-around items-center w-full  ">
             {/* Left: Preview Box */}
             <div className="bg-gray-300 rounded-md shadow-sm flex  p-1 w-1/5">
               <div
                 className="text-center p-1 rounded-md w-full transition-transform duration-300 flex flex-col items-center justify-center"
                 style={{
-                  backgroundColor: modalData?.backgroundColor || "white",
+                  backgroundColor: modalData?.backgroundColor || "transparent",
                   color: modalData?.textColor || "black",
                   transform: `rotate(${modalData?.rotation || 0}deg)`,
                   fontFamily: modalData?.fontFamily || "inherit",
@@ -348,8 +390,8 @@ const GreetingCard = () => {
             </div>
 
             {/* Right: Input Form */}
-            <div className="w-2/3 flex items-center gap-3">
-              <div className="relative flex items-center w-full">
+            <div className="w-full flex items-center justify-around gap-3 p-1 ">
+              <div className="relative flex items-center w-2/5 m-1">
                 <input
                   type="text"
                   className="p-2 pl-3 pr-10 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
@@ -364,16 +406,21 @@ const GreetingCard = () => {
                     startListening("text");
                   }}
                   className={`absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full p-2 transition ${
-                    isListening
+                    isListening == "text"
                       ? "bg-red-500 text-white"
                       : "bg-gray-200 hover:bg-gray-300"
                   }`}
                 >
-                  <Mic size={16} strokeWidth={0.5} />
+                  <Mic
+                    size={16}
+                    color="#243dff"
+                    strokeWidth={0.5}
+                    absoluteStrokeWidth
+                  />
                 </button>
               </div>
 
-              <div className="relative flex items-center w-1/3">
+              <div className="relative flex items-center w-1/6">
                 <input
                   type="text"
                   className="p-2 pl-3 pr-10 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
@@ -388,102 +435,129 @@ const GreetingCard = () => {
                     startListening("name");
                   }}
                   className={`absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full p-2 transition ${
-                    isListening
+                    isListening == "name"
                       ? "bg-red-500 text-white"
                       : "bg-gray-200 hover:bg-gray-300"
                   }`}
                 >
-                  <Mic size={16} strokeWidth={0.5} />
+                  <Mic
+                    size={16}
+                    color="#243dff"
+                    strokeWidth={0.5}
+                    absoluteStrokeWidth
+                  />
                 </button>
               </div>
 
               {/* Formatting Controls */}
-              <button
+              <div
+                className="flex flex-col items-center gap-1 p-1 cursor-pointer "
                 onClick={() =>
                   setModalData({ ...modalData, isBold: !modalData?.isBold })
                 }
-                className={`rounded-lg transition ${
-                  modalData?.isBold ? "bg-blue-600 text-white" : ""
-                }`}
               >
-                <Bold size={16} strokeWidth={0.5} absoluteStrokeWidth />
-              </button>
-              <button
+                <button className={`rounded-lg transition `}>
+                  <Bold size={16} strokeWidth={0.5} absoluteStrokeWidth />
+                </button>
+                <span className="text-xs">Bold</span>
+              </div>
+              <div
+                className="flex flex-col items-center gap-1 cursor-pointer "
                 onClick={() =>
-                  setModalData({ ...modalData, isItalic: !modalData?.isItalic })
+                  setModalData({
+                    ...modalData,
+                    isItalic: !modalData?.isItalic,
+                  })
                 }
-                className={`rounded-lg transition ${
-                  modalData?.isItalic ? "bg-blue-600 text-white italic" : ""
-                }`}
               >
-                <Italic size={16} strokeWidth={0.5} absoluteStrokeWidth />
-              </button>
-              <button
+                <button className={` rounded-md transition `}>
+                  <Italic size={14} strokeWidth={0.5} absoluteStrokeWidth />
+                </button>
+                <span className="text-xs">Italic</span>
+              </div>
+
+              <div
+                className="flex flex-col items-center gap-1 cursor-pointer "
                 onClick={() =>
                   setModalData({
                     ...modalData,
                     rotation: (modalData?.rotation || 0) - 10,
                   })
                 }
-                className=" rounded-lg transition"
               >
-                <RotateCcw size={16} strokeWidth={0.5} absoluteStrokeWidth />
-              </button>
-              <button
+                <button className=" rounded-lg transition">
+                  <RotateCcw size={16} strokeWidth={0.5} absoluteStrokeWidth />
+                </button>
+                <span className="text-xs">Left</span>
+              </div>
+              <div
+                className="flex flex-col items-center gap-1 cursor-pointer "
                 onClick={() =>
                   setModalData({
                     ...modalData,
                     rotation: (modalData?.rotation || 0) + 10,
                   })
                 }
-                className="rounded-lg transition"
               >
-                <RotateCw size={16} strokeWidth={0.5} absoluteStrokeWidth />
-              </button>
-
+                <button className="rounded-lg transition">
+                  <RotateCw size={16} strokeWidth={0.5} absoluteStrokeWidth />
+                </button>
+                <span className="text-xs">Right</span>
+              </div>
               {/* Font Picker */}
               <div
-                className="rounded-lg cursor-pointer"
+                className="flex flex-col items-center gap-1 cursor-pointer "
                 onClick={() => {
                   setShowFont(!showFont);
                   setShowTextPicker(false);
                   setShowBackgroundTextPicker(false);
                 }}
               >
-                <Type size={16} strokeWidth={0.5} absoluteStrokeWidth />
+                <div className="rounded-lg cursor-pointer">
+                  <Type size={16} strokeWidth={0.5} absoluteStrokeWidth />
+                </div>
+                <span className="text-xs">Font</span>
               </div>
-
               {/* Color Pickers */}
               <div
-                className=" cursor-pointer rounded-lg transition "
+                className="flex flex-col items-center gap-1 cursor-pointer "
                 onClick={() => {
                   setShowTextPicker(!showTextPicker);
                   setShowFont(false);
                   setShowBackgroundTextPicker(false);
                 }}
               >
-                <Baseline size={16} strokeWidth={0.5} absoluteStrokeWidth />
+                <div className=" cursor-pointer rounded-lg transition ">
+                  <Baseline size={16} strokeWidth={0.5} absoluteStrokeWidth />
+                </div>
+                <span className="text-xs">Text </span>
               </div>
-
               <div
-                className=" cursor-pointer rounded-lg transition"
+                className="flex flex-col items-center gap-1 cursor-pointer "
                 onClick={() => {
                   setShowBackgroundTextPicker(!showBackgroundTextPicker);
                   setShowFont(false);
                   setShowTextPicker(false);
                 }}
               >
-                <PaintBucket size={16} strokeWidth={0.5} absoluteStrokeWidth />
+                <div className=" rounded-lg transition">
+                  <PaintBucket
+                    size={16}
+                    strokeWidth={0.5}
+                    absoluteStrokeWidth
+                  />
+                </div>
+                <span className="text-xs">BG </span>
               </div>
-
               {/* Action Buttons */}
-              <button
+              <div
+                className="flex flex-col items-center gap-1 cursor-pointer "
                 onClick={() => {
                   setIsModalOpen(false);
                   setModalData({
                     text: "",
                     name: "",
-                    backgroundColor: "white",
+                    backgroundColor: "transparent",
                     textColor: "black",
                     rotation: 0,
                     fontFamily: "inherit",
@@ -491,18 +565,40 @@ const GreetingCard = () => {
                     isItalic: false,
                   });
                 }}
-                className="bg-red-700 text-white  rounded-lg text-sm hover:bg-red-600 transition"
               >
-                <CircleX size={16} strokeWidth={0.5} absoluteStrokeWidth />
-              </button>
-              <button
+                <button className="bg-red-500 p-1 text-white  rounded-lg text-sm hover:bg-red-600 transition">
+                  <CircleX size={20} strokeWidth={0.5} absoluteStrokeWidth />
+                </button>
+                <span className="text-xs">Cancel </span>
+              </div>
+              <div
+                className="flex flex-col items-center gap-1 cursor-pointer "
                 onClick={handleSaveModal}
-                className="bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition"
               >
-                <Save size={16} strokeWidth={0.5} absoluteStrokeWidth />
-              </button>
+                <button className="bg-green-500 p-1 text-white rounded-lg text-sm hover:bg-green-600 transition">
+                  <Save size={20} strokeWidth={0.5} absoluteStrokeWidth />
+                </button>
+                <span className="text-xs">Save </span>
+              </div>
+              <div
+                className="flex flex-col items-center gap-1 cursor-pointer "
+                onClick={handleDownload}
+              >
+                <button className="bg-yellow-500 p-1 text-white rounded-lg text-sm hover:bg-yellow-600 transition">
+                  <Download size={20} strokeWidth={0.5} absoluteStrokeWidth />
+                </button>
+                <span className="text-xs">Download </span>
+              </div>
             </div>
           </div>
+
+          {/* downloading */}
+          {downloading && (
+            <div className="fixed inset-[-5vh] bg-black bg-opacity-50 flex justify-center items-center z-50">
+              <div className="text-white text-xl">Downloading...</div>
+            </div>
+          )}
+
           {/* Font Dropdown */}
           {showFont && (
             <div className="absolute left-1/2 transform -translate-x-1/2 z-50 mt-2 bg-gray-200 shadow-lg p-3 rounded-lg border w-fit">
@@ -551,7 +647,7 @@ const GreetingCard = () => {
           {showBackgroundTextPicker && (
             <div className="absolute left-1/2 transform -translate-x-1/2 z-50 mt-2 bg-gray-200 shadow-lg p-3 rounded-lg border w-fit">
               <div className="flex justify-between items-center mb-2 ">
-                <label className="text-xs font-medium">BG Color</label>
+                <label className="text-xs font-medium">Background Color</label>
                 <button onClick={() => setShowBackgroundTextPicker(false)}>
                   ❌
                 </button>
@@ -564,6 +660,19 @@ const GreetingCard = () => {
                     backgroundColor: color.hex,
                   })
                 }
+                presetColors={[
+                  "transparent",
+                  "#FF6900",
+                  "#FCB900",
+                  "#7BDCB5",
+                  "#00D084",
+                  "#8ED1FC",
+                  "#0693E3",
+                  "#ABB8C3",
+                  "#EB144C",
+                  "#F78DA7",
+                  "#9900EF",
+                ]}
               />
             </div>
           )}
