@@ -22,6 +22,8 @@ import {
   Baseline,
   CircleX,
   Save,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -51,6 +53,8 @@ const GreetingCard = () => {
   const [showFont, setShowFont] = useState(false);
   const [showTextPicker, setShowTextPicker] = useState(false);
   const [isListening, setIsListening] = useState("");
+  const [toggleHeader, setToggleHeader] = useState(true);
+
   const [showBackgroundTextPicker, setShowBackgroundTextPicker] =
     useState(false);
 
@@ -94,7 +98,7 @@ const GreetingCard = () => {
       axios
         .put(`${API_BASE_URL}/greetings/${id}`, updatedData)
         // .then(() => toast.success("Position updated successfully."))
-        .catch(() => toast.error("Failed to update position."));
+        .catch((err) => toast.error("Failed to update position.", err));
     }
   };
 
@@ -168,7 +172,14 @@ const GreetingCard = () => {
           });
           toast.success("Greeting updated successfully.");
         })
-        .catch(() => toast.error("Failed to update greeting."));
+        .catch((err) => {
+          console.log("Errored ", err.response.data.error);
+          toast.error(
+            `Failed to update greeting. ${
+              err.response?.data?.error || "An unexpected error occurred."
+            }`
+          );
+        });
     } else {
       // Add new greeting
       const newGreeting = {
@@ -206,7 +217,7 @@ const GreetingCard = () => {
             isItalic: false,
           });
         })
-        .catch(() => toast.error("Failed to add greeting."));
+        .catch((err) => toast.error("Failed to add greeting.", err));
     }
   };
 
@@ -215,10 +226,7 @@ const GreetingCard = () => {
       type: ItemType.TEXT,
       item: { id: item.greetingId },
     });
-    let movement =
-      modalData.greetingId == item.greetingId
-        ? modalData?.rotation
-        : item.rotation;
+
     return (
       <div
         ref={drag}
@@ -226,26 +234,58 @@ const GreetingCard = () => {
         style={{
           left: `${item.x}px`,
           top: `${item.y}px`,
-          color: item.textColor || greetTextColour,
-          backgroundColor: item.backgroundColor || greetBackgroundColour,
+          color:
+            modalData?.greetingId === item?.greetingId
+              ? modalData?.textColor || greetTextColour
+              : item.textColor || greetTextColour,
+          backgroundColor:
+            modalData?.greetingId === item?.greetingId
+              ? modalData?.backgroundColor || greetBackgroundColour
+              : item.backgroundColor || greetBackgroundColour,
           padding: "5px 10px",
           borderRadius: "5px",
           zIndex: 10,
-          fontWeight: item.isBold ? "bold" : "lighter",
-          fontStyle: item.isItalic ? "italic" : "normal",
-          fontFamily: item.fontFamily,
-          // transform: `rotate(${item.rotation}deg)`,
-
+          fontWeight:
+            modalData?.greetingId === item?.greetingId
+              ? modalData?.isBold
+                ? "bold"
+                : "normal"
+              : item.isBold
+              ? "bold"
+              : "normal",
+          fontStyle:
+            modalData?.greetingId === item?.greetingId
+              ? modalData?.isItalic
+                ? "italic"
+                : "normal"
+              : item.isItalic
+              ? "italic"
+              : "normal",
+          fontFamily:
+            modalData?.greetingId === item?.greetingId
+              ? modalData?.fontFamily || "inherit"
+              : item.fontFamily || "inherit",
           transform: `rotate(${
-            modalData.greetingId === item.greetingId
+            modalData?.greetingId === item?.greetingId
               ? modalData?.rotation || 0
               : item.rotation || 0
           }deg)`,
         }}
       >
         <div className="flex flex-col">
-          <span>{item.message}</span>
-          <span className="text-sm mt-1">-{item.senderName}</span>
+          {/* <span>{item.message}</span> */}
+          <span>
+            {modalData?.greetingId === item?.greetingId
+              ? modalData?.text ?? ""
+              : item?.message ?? ""}
+          </span>
+
+          <span className="text-sm mt-1">
+            -{" "}
+            {modalData?.greetingId === item?.greetingId
+              ? modalData?.name ?? ""
+              : item?.senderName ?? ""}
+          </span>
         </div>
         {loggedInEmployeeId === item.employeeId && (
           <button
@@ -254,10 +294,7 @@ const GreetingCard = () => {
               console.log(item.employeeId);
               console.log("Edit button clicked!");
               e.stopPropagation();
-              window.scrollTo({
-                top: 0,
-                behavior: "smooth",
-              });
+
               setModalData({
                 x: item.x,
                 y: item.y,
@@ -273,6 +310,7 @@ const GreetingCard = () => {
                 rotation: item.rotation || 0,
               });
               setIsModalOpen(true);
+              setToggleHeader(false);
             }}
             className="absolute top-0 right-0 bg-gray-700 hover:bg-gray-800 p-1 rounded-full hidden group-hover:block"
           >
@@ -342,13 +380,13 @@ const GreetingCard = () => {
     const originalWidth = containerRef.current.style.width;
     const originalHeight = containerRef.current.style.height;
 
-    // Increase dimensions by 100px
-    containerRef.current.style.width = `${
-      containerRef.current.offsetWidth + 100
-    }px`;
-    containerRef.current.style.height = `${
-      containerRef.current.offsetHeight + 100
-    }px`;
+    // // Increase dimensions by 100px
+    // containerRef.current.style.width = `${
+    //   containerRef.current.offsetWidth + 100
+    // }px`;
+    // containerRef.current.style.height = `${
+    //   containerRef.current.offsetHeight + 100
+    // }px`;
 
     try {
       // Capture the updated size
@@ -370,6 +408,10 @@ const GreetingCard = () => {
     }
   };
 
+  const handleToggleHeader = () => {
+    setToggleHeader((prevState) => !prevState);
+  };
+
   return (
     <>
       {loading ? (
@@ -378,9 +420,13 @@ const GreetingCard = () => {
         <DndProvider backend={HTML5Backend}>
           {/* header */}
 
-          <div className="flex justify-around items-center w-full  ">
+          <div
+            className={`fixed top-0 left-0 right-0 flex justify-around items-center w-full bg-white z-[999] shadow-md transition-transform duration-300 ${
+              toggleHeader ? "-translate-y-full" : "translate-y-0"
+            }`}
+          >
             {/* Left: Preview Box */}
-            <div className="bg-gray-300 rounded-md shadow-sm flex  p-1 w-1/5">
+            {/* <div className="bg-gray-300 rounded-md shadow-sm flex  p-1 w-1/5">
               <div
                 className="text-center p-1 rounded-md w-full transition-transform duration-300 flex flex-col items-center justify-center"
                 style={{
@@ -396,7 +442,7 @@ const GreetingCard = () => {
                   {modalData?.text || "Your message here..."}
                 </p>
               </div>
-            </div>
+            </div> */}
 
             {/* Right: Input Form */}
             <div className="w-full flex items-center justify-around gap-3 p-1 ">
@@ -580,6 +626,7 @@ const GreetingCard = () => {
                 </button>
                 <span className="text-xs">Cancel </span>
               </div>
+
               <div
                 className="flex flex-col items-center gap-1 cursor-pointer "
                 onClick={handleSaveModal}
@@ -589,6 +636,7 @@ const GreetingCard = () => {
                 </button>
                 <span className="text-xs">Save </span>
               </div>
+
               <div
                 className="flex flex-col items-center gap-1 cursor-pointer "
                 onClick={handleDownload}
@@ -597,6 +645,25 @@ const GreetingCard = () => {
                   <Download size={20} strokeWidth={0.5} absoluteStrokeWidth />
                 </button>
                 <span className="text-xs">Download </span>
+              </div>
+              <div
+                className="flex flex-col items-center gap-1 cursor-pointer "
+                onClick={() => {
+                  setShowBackgroundTextPicker(false);
+                  setShowFont(false);
+                  setShowTextPicker(false);
+                  handleToggleHeader();
+                }}
+              >
+                <button className="bg-black p-1 text-white rounded-lg text-sm hover:bg-gray-600 transition">
+                  <EyeOff
+                    size={20}
+                    color="#ffffff"
+                    strokeWidth={0.5}
+                    absoluteStrokeWidth
+                  />
+                </button>
+                <span className="text-xs">Hide </span>
               </div>
             </div>
           </div>
@@ -610,8 +677,13 @@ const GreetingCard = () => {
 
           {/* Font Dropdown */}
           {showFont && (
-            <div className="absolute left-1/2 transform -translate-x-1/2 z-50 mt-2 bg-gray-200 shadow-lg p-3 rounded-lg border w-fit">
-              <div className="flex justify-between items-center mb-2 ">
+            <div
+              className="fixed right-4 z-50 bg-gray-200 shadow-lg p-3 rounded-lg border w-fit"
+              style={{
+                top: "4rem",
+              }}
+            >
+              <div className="flex justify-between items-center mb-2">
                 <label className="text-xs font-medium">Font</label>
                 <button onClick={() => setShowFont(false)}>❌</button>
               </div>
@@ -638,7 +710,13 @@ const GreetingCard = () => {
 
           {/* Text Color Picker */}
           {showTextPicker && (
-            <div className="absolute left-1/2 transform -translate-x-1/2 z-50 mt-2 bg-gray-200 shadow-lg p-3 rounded-lg border w-fit">
+            <div
+              // className="fixed left-1/2 transform -translate-x-1/2 z-50 bg-gray-200 shadow-lg p-3 rounded-lg border w-fit"
+              className="fixed right-4 z-50 bg-gray-200 shadow-lg p-3 rounded-lg border w-fit"
+              style={{
+                top: "4rem",
+              }}
+            >
               <div className="flex justify-between items-center mb-2 ">
                 <label className="text-xs font-medium">Text Color</label>
                 <button onClick={() => setShowTextPicker(false)}>❌</button>
@@ -654,7 +732,12 @@ const GreetingCard = () => {
 
           {/* Background Color Picker */}
           {showBackgroundTextPicker && (
-            <div className="absolute left-1/2 transform -translate-x-1/2 z-50 mt-2 bg-gray-200 shadow-lg p-3 rounded-lg border w-fit">
+            <div
+              className="fixed right-4 z-50 bg-gray-200 shadow-lg p-3 rounded-lg border w-fit"
+              style={{
+                top: "4rem",
+              }}
+            >
               <div className="flex justify-between items-center mb-2 ">
                 <label className="text-xs font-medium">Background Color</label>
                 <button onClick={() => setShowBackgroundTextPicker(false)}>
@@ -686,7 +769,29 @@ const GreetingCard = () => {
             </div>
           )}
 
-          <div className="flex flex-col items-center space-y-6 bg-gradient-to-br from-indigo-500 to-purple-600 ">
+          {/* Greeting Card */}
+          <div
+            className={`flex flex-col items-center space-y-6 bg-gradient-to-br from-indigo-500 to-purple-600  
+            ${toggleHeader ? "" : "mt-14"}`}
+          >
+            <div className="fixed w-full flex justify-end pr-4 m-1">
+              <div
+                className={`flex flex-col items-center gap-1 cursor-pointer  ${
+                  toggleHeader ? "translate-y-0" : "-translate-y-full"
+                }`}
+                onClick={handleToggleHeader}
+              >
+                <button className="bg-black p-1 text-white rounded-lg text-sm hover:bg-gray-600 transition">
+                  <Eye
+                    size={20}
+                    color="#ffffff"
+                    strokeWidth={0.5}
+                    absoluteStrokeWidth
+                  />
+                </button>
+                <span className="text-xs">Show </span>
+              </div>
+            </div>
             <div
               ref={(node) => {
                 containerRef.current = node;

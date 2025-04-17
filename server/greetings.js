@@ -119,10 +119,10 @@ router.put("/:greetingId", (req, res) => {
   console.log("senderName", senderName);
   console.log("isBold", isBold);
   console.log("rotation", rotation);
-  if (!message || !employeeId) {
+  if (!message || !employeeId || !senderName) {
     return res
       .status(400)
-      .json({ error: "message and employeeId are required" });
+      .json({ error: "message,sender name and employeeId are required" });
   }
 
   try {
