@@ -439,13 +439,14 @@ const GreetingCard = () => {
 
       // Prepare email payload
       const payload = {
-        recipientEmail: "raghav.mohan@motherson.com", // Replace with actual recipient email
+        recipientEmail: "raghav.mohan@motherson.com",
         subject: title || "Your Greeting Card",
         message: "Here's your personalized greeting card!",
-        imageBase64: imageBase64.split(",")[1], // Remove the Base64 header
-        fileName: `${title || "greeting-card"}.png`,
+        imageBase64: imageBase64.split(",")[1],
+        fileName: `${title || "greeting-card"}`,
+        cardId: cardId,
       };
-
+      console.log("PL", payload);
       // Send email via API
       const response = await fetch(`${API_BASE_URL}/cards/send-email`, {
         method: "POST",
@@ -464,7 +465,6 @@ const GreetingCard = () => {
     } catch (error) {
       toast.error("An error occurred while sending the email.", error);
     } finally {
-      // Reset dimensions to original
       containerRef.current.style.width = originalWidth;
       containerRef.current.style.height = originalHeight;
       setDownloading(false);
