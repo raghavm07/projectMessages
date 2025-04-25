@@ -38,7 +38,7 @@ const ItemType = {
 
 const GreetingCard = () => {
   const { cardId } = useParams();
-
+  console.log("cardIdcardId", cardId);
   const [title, setTitle] = useState("");
   const [textItems, setTextItems] = useState([]);
   const [cardBackground, setCardBackground] = useState("");
@@ -62,7 +62,7 @@ const GreetingCard = () => {
 
   const API_BASE_URL = "http://localhost:5500/api";
   const loggedInEmployeeId = localStorage.getItem("employeeId");
-
+  console.log("loggedInEmployeeId", loggedInEmployeeId);
   useEffect(() => {
     const fetchCardData = async () => {
       setLoading(true);
@@ -104,7 +104,6 @@ const GreetingCard = () => {
 
   const handleSaveModal = () => {
     if (!modalData) return;
-    console.log(modalData);
     const {
       greetingId,
       text,
@@ -118,12 +117,17 @@ const GreetingCard = () => {
       backgroundColor,
       textColor,
       rotation,
+      cardId,
     } = modalData;
+    console.log("modalData", modalData);
+    console.log("cardId", cardId);
+    console.log("cardIdcardId3", cardId);
     console.log(x, y);
     if (greetingId) {
       // Edit existing greeting
       axios
         .put(`${API_BASE_URL}/greetings/${greetingId}`, {
+          cardId: cardId,
           message: text,
           senderName: name,
           employeeId: employeeId,
@@ -142,6 +146,7 @@ const GreetingCard = () => {
               item.greetingId === greetingId
                 ? {
                     ...item,
+                    cardId,
                     message: text,
                     senderName: name,
                     employeeId: employeeId,
@@ -169,6 +174,7 @@ const GreetingCard = () => {
             fontFamily: "inherit",
             isBold: false,
             isItalic: false,
+            cardId,
           });
           toast.success("Greeting updated successfully.");
         })
@@ -200,7 +206,7 @@ const GreetingCard = () => {
       axios
         .post(`${API_BASE_URL}/greetings`, newGreeting)
         .then((response) => {
-          setTextItems((prev) => [...prev, response.data.data]);
+          setTextItems((prev) => [...prev, response.data]);
           toast.success("Greeting added successfully.");
           setIsModalOpen(false);
           setShowTextPicker(false);
@@ -215,6 +221,7 @@ const GreetingCard = () => {
             fontFamily: "inherit",
             isBold: false,
             isItalic: false,
+            cardId,
           });
         })
         .catch((err) => toast.error("Failed to add greeting.", err));
@@ -226,7 +233,12 @@ const GreetingCard = () => {
       type: ItemType.TEXT,
       item: { id: item.greetingId },
     });
-
+    console.log(
+      "Checkking",
+      typeof loggedInEmployeeId,
+      typeof item.employeeId,
+      loggedInEmployeeId === item.employeeId
+    );
     return (
       <div
         ref={drag}
@@ -287,7 +299,7 @@ const GreetingCard = () => {
               : item?.senderName ?? ""}
           </span>
         </div>
-        {loggedInEmployeeId === item.employeeId && (
+        {loggedInEmployeeId == item.employeeId && (
           <button
             onClick={(e) => {
               console.log(loggedInEmployeeId);
@@ -308,6 +320,7 @@ const GreetingCard = () => {
                 backgroundColor: item.backgroundColor,
                 textColor: item.textColor,
                 rotation: item.rotation || 0,
+                cardId,
               });
               setIsModalOpen(true);
               setToggleHeader(false);

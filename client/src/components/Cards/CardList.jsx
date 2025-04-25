@@ -141,7 +141,7 @@ const CardsList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCardTitle, setNewCardTitle] = useState("");
   const [newCardBackgroundUrl, setNewCardBackgroundUrl] = useState("");
-  const [receiverEmployeeId, setReceiverEmployeeId] = useState("");
+  const [receiverEmployeeId, setReceiverEmployeeId] = useState();
   const [greetBackgroundColour, setGreetBackgroundColour] = useState("");
   const [greetTextColour, setGreetTextColour] = useState("");
   const [eventType, setEventType] = useState("");
@@ -222,9 +222,10 @@ const CardsList = () => {
       setNewCardTitle(card.cardTitle);
       setEventType(card.eventType);
       setNewCardBackgroundUrl(card.cardBackgroundUrl);
-      setReceiverEmployeeId(card.ReciverEmployeeId);
+      setReceiverEmployeeId(Number(card.ReciverEmployeeId));
       setGreetBackgroundColour(card.greetBackgroundColour);
       setGreetTextColour(card.greetTextColour);
+      console.log("card2", card);
     } else {
       setEditCardId(null);
       setNewCardTitle("");
@@ -245,18 +246,19 @@ const CardsList = () => {
     const payload = {
       cardTitle: newCardTitle,
       cardBackgroundUrl: newCardBackgroundUrl,
-      ReciverEmployeeId: receiverEmployeeId,
+      ReciverEmployeeId: Number(receiverEmployeeId),
       greetBackgroundColour: greetBackgroundColour,
       greetTextColour: greetTextColour,
       eventType: eventType,
     };
-    console.log(payload);
+    console.log("payload", payload);
     try {
       if (editCardId) {
         const response = await axios.put(
           `http://localhost:5500/api/cards/${editCardId}`,
           payload
         );
+        console.log("response.data.data", response.data.data);
         setCards(
           cards.map((card) =>
             card.cardId === editCardId ? response.data.data : card
@@ -268,7 +270,7 @@ const CardsList = () => {
           "http://localhost:5500/api/cards",
           payload
         );
-        setCards([...cards, response.data.data]);
+        setCards([...cards, response.data]);
         toast.success("Card created successfully!");
       }
     } catch (error) {
