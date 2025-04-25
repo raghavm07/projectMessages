@@ -381,9 +381,49 @@ const GreetingCard = () => {
     recognition.start();
   };
 
+  // const handleDownload = async () => {
+  //   if (!containerRef.current) {
+  //     toast.error("Unable to download the card.");
+  //     return;
+  //   }
+
+  //   setDownloading(true);
+
+  //   // Save original dimensions
+  //   const originalWidth = containerRef.current.style.width;
+  //   const originalHeight = containerRef.current.style.height;
+
+  //   // // Increase dimensions by 100px
+  //   // containerRef.current.style.width = `${
+  //   //   containerRef.current.offsetWidth + 100
+  //   // }px`;
+  //   // containerRef.current.style.height = `${
+  //   //   containerRef.current.offsetHeight + 100
+  //   // }px`;
+
+  //   try {
+  //     // Capture the updated size
+  //     const image = await toPng(containerRef.current);
+
+  //     // Reset to original dimensions
+  //     containerRef.current.style.width = originalWidth;
+  //     containerRef.current.style.height = originalHeight;
+
+  //     download(image, `${title || "greeting-card"}.png`);
+  //     toast.success("Card downloaded successfully!");
+  //   } catch (error) {
+  //     toast.error("Failed to download the card.", error);
+  //   } finally {
+  //     // Ensure dimensions are reset in case of error
+  //     containerRef.current.style.width = originalWidth;
+  //     containerRef.current.style.height = originalHeight;
+  //     setDownloading(false);
+  //   }
+  // };
+
   const handleDownload = async () => {
     if (!containerRef.current) {
-      toast.error("Unable to download the card.");
+      toast.error("Unable to process the card.");
       return;
     }
 
@@ -393,28 +433,38 @@ const GreetingCard = () => {
     const originalWidth = containerRef.current.style.width;
     const originalHeight = containerRef.current.style.height;
 
-    // // Increase dimensions by 100px
-    // containerRef.current.style.width = `${
-    //   containerRef.current.offsetWidth + 100
-    // }px`;
-    // containerRef.current.style.height = `${
-    //   containerRef.current.offsetHeight + 100
-    // }px`;
-
     try {
-      // Capture the updated size
-      const image = await toPng(containerRef.current);
+      // Capture the card as an image (Base64 format)
+      const imageBase64 = await toPng(containerRef.current);
 
-      // Reset to original dimensions
-      containerRef.current.style.width = originalWidth;
-      containerRef.current.style.height = originalHeight;
+      // Prepare email payload
+      const payload = {
+        recipientEmail: "raghav.mohan@motherson.com", // Replace with actual recipient email
+        subject: title || "Your Greeting Card",
+        message: "Here's your personalized greeting card!",
+        imageBase64: imageBase64.split(",")[1], // Remove the Base64 header
+        fileName: `${title || "greeting-card"}.png`,
+      };
 
-      download(image, `${title || "greeting-card"}.png`);
-      toast.success("Card downloaded successfully!");
+      // Send email via API
+      const response = await fetch(`${API_BASE_URL}/cards/send-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        toast.success("Card sent via email successfully!");
+      } else {
+        const errorData = await response.json();
+        toast.error(`Failed to send email: ${errorData.message}`);
+      }
     } catch (error) {
-      toast.error("Failed to download the card.", error);
+      toast.error("An error occurred while sending the email.", error);
     } finally {
-      // Ensure dimensions are reset in case of error
+      // Reset dimensions to original
       containerRef.current.style.width = originalWidth;
       containerRef.current.style.height = originalHeight;
       setDownloading(false);
@@ -684,7 +734,7 @@ const GreetingCard = () => {
           {/* downloading */}
           {downloading && (
             <div className="fixed inset-[-5vh] bg-black bg-opacity-50 flex justify-center items-center z-50">
-              <div className="text-white text-xl">Downloading...</div>
+              <div className="text-white text-xl">Mailing...</div>
             </div>
           )}
 

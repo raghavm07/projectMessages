@@ -53,7 +53,7 @@ const CardItem = ({ card, onEdit, onDelete, navigate }) => (
           <strong>{card.eventType}</strong>
         </p>
         <p className="text-gray-600">
-          <strong>Employee ID:</strong> {card.ReciverEmployeeId}
+          <strong>Employee ID:</strong> {card.reciverEmployeeId}
         </p>
       </div>
 
@@ -161,7 +161,8 @@ const CardsList = () => {
       const response = await axios.get(url, {
         params: query.trim() ? { query: query.trim() } : {},
       });
-      console.log("API Response:", response.data);
+      console.log("API Response:", response.data.data || response.data);
+
       setCards(response.data.data || response.data);
     } catch (error) {
       console.error("Error fetching cards :", error);
