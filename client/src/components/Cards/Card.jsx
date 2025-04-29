@@ -188,6 +188,7 @@ const GreetingCard = () => {
         });
     } else {
       // Add new greeting
+
       const newGreeting = {
         cardId: cardId,
         message: text,
@@ -202,6 +203,7 @@ const GreetingCard = () => {
         textColor: textColor,
         rotation: rotation,
       };
+      console.log("newGreeting", newGreeting);
 
       axios
         .post(`${API_BASE_URL}/greetings`, newGreeting)
@@ -221,7 +223,7 @@ const GreetingCard = () => {
             fontFamily: "inherit",
             isBold: false,
             isItalic: false,
-            cardId,
+            cardId: cardId,
           });
         })
         .catch((err) => toast.error("Failed to add greeting.", err));
@@ -571,7 +573,11 @@ const GreetingCard = () => {
               <div
                 className="flex flex-col items-center gap-1 p-1 cursor-pointer "
                 onClick={() =>
-                  setModalData({ ...modalData, isBold: !modalData?.isBold })
+                  setModalData({
+                    ...modalData,
+                    isBold: !modalData?.isBold,
+                    cardId: cardId,
+                  })
                 }
               >
                 <button className={`rounded-lg transition `}>
@@ -585,6 +591,7 @@ const GreetingCard = () => {
                   setModalData({
                     ...modalData,
                     isItalic: !modalData?.isItalic,
+                    cardId: cardId,
                   })
                 }
               >
@@ -600,6 +607,7 @@ const GreetingCard = () => {
                   setModalData({
                     ...modalData,
                     rotation: (modalData?.rotation || 0) - 10,
+                    cardId: cardId,
                   })
                 }
               >
@@ -614,6 +622,7 @@ const GreetingCard = () => {
                   setModalData({
                     ...modalData,
                     rotation: (modalData?.rotation || 0) + 10,
+                    cardId: cardId,
                   })
                 }
               >
@@ -681,6 +690,7 @@ const GreetingCard = () => {
                     fontFamily: "inherit",
                     isBold: false,
                     isItalic: false,
+                    cardId: cardId,
                   });
                 }}
               >
@@ -760,6 +770,7 @@ const GreetingCard = () => {
                       setModalData({
                         ...modalData,
                         fontFamily: font.value,
+                        cardId: cardId,
                       });
                       setShowFont(false);
                     }}
@@ -787,7 +798,11 @@ const GreetingCard = () => {
               <SketchPicker
                 color={modalData?.textColor}
                 onChange={(color) =>
-                  setModalData({ ...modalData, textColor: color.hex })
+                  setModalData({
+                    ...modalData,
+                    textColor: color.hex,
+                    cardId: cardId,
+                  })
                 }
               />
             </div>
@@ -813,6 +828,7 @@ const GreetingCard = () => {
                   setModalData({
                     ...modalData,
                     backgroundColor: color.hex,
+                    cardId: cardId,
                   })
                 }
                 presetColors={[
@@ -879,6 +895,7 @@ const GreetingCard = () => {
                   name: "",
                   x: x,
                   y: y,
+                  cardId: cardId,
                 });
                 setIsModalOpen(true);
               }}

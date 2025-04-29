@@ -1,12 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 
 const GreetingCardSkeleton = () => {
-  const navigate = useNavigate();
   return (
     <div className="flex flex-col items-center space-y-6 bg-gradient-to-br from-indigo-500 to-purple-600">
       {/* Header Skeleton */}
-      <div className="flex justify-between items-center w-full p-4">
+      {/* <div className="flex justify-between items-center w-full p-4">
         <button
           onClick={() => navigate("/")}
           className="px-4 py-2 bg-white text-blue-600 font-semibold rounded-lg"
@@ -14,8 +12,8 @@ const GreetingCardSkeleton = () => {
           Home
         </button>
         <div className="w-48 h-8 bg-gray-300 rounded-lg animate-pulse"></div>
-        <div className="flex space-x-4">
-          {/* {Array(4)
+        <div className="flex space-x-4"> */}
+      {/* {Array(4)
             .fill(0)
             .map((_, index) => (
               <div
@@ -23,8 +21,8 @@ const GreetingCardSkeleton = () => {
                 className="w-24 h-10 bg-gray-300 rounded-lg animate-pulse"
               ></div>
             ))} */}
-        </div>
-      </div>
+      {/* </div>
+      </div> */}
 
       {/* Card Skeleton */}
       <div
