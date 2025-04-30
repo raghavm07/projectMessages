@@ -223,7 +223,7 @@ const CardsList = () => {
       setNewCardTitle(card.cardTitle);
       setEventType(card.eventType);
       setNewCardBackgroundUrl(card.cardBackgroundUrl);
-      setReceiverEmployeeId(Number(card.ReciverEmployeeId));
+      setReceiverEmployeeId(Number(card.reciverEmployeeId));
       setGreetBackgroundColour(card.greetBackgroundColour);
       setGreetTextColour(card.greetTextColour);
       console.log("card2", card);
@@ -262,7 +262,7 @@ const CardsList = () => {
         console.log("response.data.data", response.data.data);
         setCards(
           cards.map((card) =>
-            card.cardId === editCardId ? response.data.data : card
+            card.cardId === editCardId ? response.data : card
           )
         );
         toast.success("Card updated successfully!");

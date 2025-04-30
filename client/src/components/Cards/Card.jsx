@@ -64,6 +64,7 @@ const GreetingCard = () => {
   const loggedInEmployeeId = localStorage.getItem("employeeId");
   console.log("loggedInEmployeeId", loggedInEmployeeId);
   useEffect(() => {
+    if (!cardId) return;
     const fetchCardData = async () => {
       setLoading(true);
       try {
