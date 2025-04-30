@@ -38,7 +38,6 @@ const ItemType = {
 
 const GreetingCard = () => {
   const { cardId } = useParams();
-  console.log("cardIdcardId", cardId);
   const [title, setTitle] = useState("");
   const [textItems, setTextItems] = useState([]);
   const [cardBackground, setCardBackground] = useState("");
@@ -54,7 +53,11 @@ const GreetingCard = () => {
   const [showTextPicker, setShowTextPicker] = useState(false);
   const [isListening, setIsListening] = useState("");
   const [toggleHeader, setToggleHeader] = useState(true);
-
+  const [greeted, setGreeted] = useState({
+    greetId: 0,
+    isGreeted: false,
+    isEditing: false,
+  });
   const [showBackgroundTextPicker, setShowBackgroundTextPicker] =
     useState(false);
 
@@ -63,8 +66,11 @@ const GreetingCard = () => {
   const API_BASE_URL = "http://localhost:5500/api";
   const loggedInEmployeeId = localStorage.getItem("employeeId");
   console.log("loggedInEmployeeId", loggedInEmployeeId);
+
   useEffect(() => {
+    console.log("cardId", cardId);
     if (!cardId) return;
+    console.log("cardId2", cardId);
     const fetchCardData = async () => {
       setLoading(true);
       try {
@@ -86,6 +92,26 @@ const GreetingCard = () => {
     };
     fetchCardData();
   }, [cardId]);
+  console.log("textItems", textItems);
+
+  useEffect(() => {
+    const Greeted = () => {
+      console.log("loggedInEmployeeId", loggedInEmployeeId);
+
+      for (let i = 0; i < textItems.length; i++) {
+        if (textItems[i].employeeId == loggedInEmployeeId) {
+          setGreeted({
+            greetId: textItems[i].greetingId,
+            isGreeted: true,
+            isEditing: false,
+          });
+        }
+      }
+    };
+
+    Greeted();
+  }, [greeted.greetId, greeted.isGreeted, loggedInEmployeeId, textItems]);
+  console.log("greeted", greeted);
 
   const moveTextItem = (id, x, y) => {
     setTextItems((prev) =>
@@ -104,6 +130,8 @@ const GreetingCard = () => {
   };
 
   const handleSaveModal = () => {
+    console.log("Greeted Save", greeted);
+    console.log("clicked saved");
     if (!modalData) return;
     const {
       greetingId,
@@ -118,10 +146,8 @@ const GreetingCard = () => {
       backgroundColor,
       textColor,
       rotation,
-      cardId,
     } = modalData;
     console.log("modalData", modalData);
-    console.log("cardId", cardId);
     console.log("cardIdcardId3", cardId);
     console.log(x, y);
     if (greetingId) {
@@ -158,7 +184,7 @@ const GreetingCard = () => {
                     textColor,
                     rotation,
                   }
-                : item
+                : { ...item, cardId }
             )
           );
 
@@ -175,7 +201,7 @@ const GreetingCard = () => {
             fontFamily: "inherit",
             isBold: false,
             isItalic: false,
-            cardId,
+            cardId: cardId,
           });
           toast.success("Greeting updated successfully.");
         })
@@ -309,6 +335,10 @@ const GreetingCard = () => {
               console.log(item.employeeId);
               console.log("Edit button clicked!");
               e.stopPropagation();
+              setGreeted({
+                ...greeted,
+                isEditing: true,
+              });
 
               setModalData({
                 x: item.x,
@@ -383,46 +413,6 @@ const GreetingCard = () => {
 
     recognition.start();
   };
-
-  // const handleDownload = async () => {
-  //   if (!containerRef.current) {
-  //     toast.error("Unable to download the card.");
-  //     return;
-  //   }
-
-  //   setDownloading(true);
-
-  //   // Save original dimensions
-  //   const originalWidth = containerRef.current.style.width;
-  //   const originalHeight = containerRef.current.style.height;
-
-  //   // // Increase dimensions by 100px
-  //   // containerRef.current.style.width = `${
-  //   //   containerRef.current.offsetWidth + 100
-  //   // }px`;
-  //   // containerRef.current.style.height = `${
-  //   //   containerRef.current.offsetHeight + 100
-  //   // }px`;
-
-  //   try {
-  //     // Capture the updated size
-  //     const image = await toPng(containerRef.current);
-
-  //     // Reset to original dimensions
-  //     containerRef.current.style.width = originalWidth;
-  //     containerRef.current.style.height = originalHeight;
-
-  //     download(image, `${title || "greeting-card"}.png`);
-  //     toast.success("Card downloaded successfully!");
-  //   } catch (error) {
-  //     toast.error("Failed to download the card.", error);
-  //   } finally {
-  //     // Ensure dimensions are reset in case of error
-  //     containerRef.current.style.width = originalWidth;
-  //     containerRef.current.style.height = originalHeight;
-  //     setDownloading(false);
-  //   }
-  // };
 
   const handleDownload = async () => {
     if (!containerRef.current) {
@@ -678,6 +668,7 @@ const GreetingCard = () => {
                 <span className="text-xs">BG </span>
               </div>
               {/* Action Buttons */}
+              {/* Cancel */}
               <div
                 className="flex flex-col items-center gap-1 cursor-pointer "
                 onClick={() => {
@@ -701,16 +692,51 @@ const GreetingCard = () => {
                 <span className="text-xs">Cancel </span>
               </div>
 
-              <div
+              {/* Save All */}
+              {/* <div
                 className="flex flex-col items-center gap-1 cursor-pointer "
                 onClick={handleSaveModal}
               >
-                <button className="bg-green-500 p-1 text-white rounded-lg text-sm hover:bg-green-600 transition">
+                <button
+                  className={`bg-green-500 p-1 text-white rounded-lg text-sm hover:bg-green-600 transition `}
+                >
                   <Save size={20} strokeWidth={0.5} absoluteStrokeWidth />
                 </button>
                 <span className="text-xs">Save </span>
+              </div> */}
+
+              {/* Single Save */}
+              <div
+                className="flex flex-col items-center gap-1 cursor-pointer"
+                onClick={() => {
+                  if (
+                    !greeted.isGreeted ||
+                    (greeted.isEditing && greeted.isGreeted)
+                  ) {
+                    handleSaveModal();
+                  }
+                }}
+              >
+                <button
+                  className={`bg-green-500 p-1 text-white rounded-lg text-sm transition ${
+                    !greeted.isGreeted ||
+                    (greeted.isEditing && greeted.isGreeted)
+                      ? "hover:bg-green-600"
+                      : "opacity-50 cursor-not-allowed"
+                  }`}
+                  disabled={
+                    !(
+                      greeted.isGreeted === false ||
+                      (greeted.isEditing && greeted.isGreeted)
+                    )
+                  }
+                >
+                  <Save size={20} strokeWidth={0.5} absoluteStrokeWidth />
+                </button>
+                <span className="text-xs">Save</span>
               </div>
 
+              {/* Mailing */}
               <div
                 className="flex flex-col items-center gap-1 cursor-pointer "
                 onClick={handleDownload}
@@ -718,8 +744,10 @@ const GreetingCard = () => {
                 <button className="bg-yellow-500 p-1 text-white rounded-lg text-sm hover:bg-yellow-600 transition">
                   <Download size={20} strokeWidth={0.5} absoluteStrokeWidth />
                 </button>
-                <span className="text-xs">Download </span>
+                <span className="text-xs">Mail </span>
               </div>
+
+              {/* Hide */}
               <div
                 className="flex flex-col items-center gap-1 cursor-pointer "
                 onClick={() => {
