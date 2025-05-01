@@ -253,7 +253,9 @@ const GreetingCard = () => {
             cardId: cardId,
           });
         })
-        .catch((err) => toast.error("Failed to add greeting.", err));
+        .catch((err) =>
+          toast.error(`Failed to add greeting: ${err.response.data}`)
+        );
     }
   };
 
