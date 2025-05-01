@@ -918,14 +918,17 @@ const GreetingCard = () => {
                 const rect = e.currentTarget.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-
-                setModalData({
-                  text: "",
-                  name: "",
-                  x: x,
-                  y: y,
-                  cardId: cardId,
-                });
+                setGreeted((prev) => ({
+                  ...prev,
+                  isEditing: false,
+                })),
+                  setModalData({
+                    text: "",
+                    name: "",
+                    x: x,
+                    y: y,
+                    cardId: cardId,
+                  });
                 setIsModalOpen(true);
               }}
             >
